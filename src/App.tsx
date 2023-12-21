@@ -1,43 +1,20 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  StyleSheet,
-  Text,
   useColorScheme,
   View,
 } from 'react-native';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import {Typography} from '@ui-library'
+import { MarkdownView } from '@ui-library';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: "red",
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: "black",
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const markdown = `
+# MD Heading 1
+## MD Heading 2
+### MD Heading 3
+`
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,38 +31,21 @@ function App(): React.JSX.Element {
       />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+        style={backgroundStyle && {
+          paddingHorizontal: 32
+        }}>
         <View
           style={{
             backgroundColor: "white",
           }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
+            <Typography variant='heading1'>Heading 1</Typography>
+            <Typography variant='heading2'>Heading 2</Typography>
+            <Typography variant='heading3'>Heading 3</Typography>
+            <MarkdownView>{markdown}</MarkdownView>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

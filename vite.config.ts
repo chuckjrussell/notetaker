@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path';
+
 
 export default defineConfig({
   define: {
@@ -15,6 +17,7 @@ export default defineConfig({
     extensions: [".web.tsx", ".web.jsx", ".web.js", ".tsx", ".ts", ".js"],
     alias: {
       "react-native": "react-native-web",
+      '@ui-library': path.resolve(__dirname, './ui-library'),
     },
   },
   plugins: [
