@@ -5,8 +5,9 @@
   "scripts": {
     "android": "react-native run-android",
     "web": "vite",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator='iPhone 14'",
     "lint": "eslint .",
+    "pods": "cd ios && pod install && cd ..",
     "start": "react-native start",
     "test": "jest"
   },
@@ -15,8 +16,11 @@
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "0.73.1",
+    "react-native-feather": "^1.1.2",
     "react-native-markdown-display": "^7.0.2",
-    "react-native-web": "^0.19.9"
+    "react-native-svg": "^14.1.0",
+    "react-native-web": "^0.19.9",
+    "rn-responsive-styles": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

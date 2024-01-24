@@ -1,51 +1,58 @@
 import React from 'react';
+import {SafeAreaView, ScrollView, View} from 'react-native';
+
+import {NoteScreen} from '@ui-library/screens';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {Typography} from '@ui-library'
-import { MarkdownView } from '@ui-library';
-
-const markdown = `
-# MD Heading 1
-## MD Heading 2
-### MD Heading 3
-`
+  CreateResponsiveStyle,
+  DEVICE_SIZES,
+  useDeviceSize,
+} from 'rn-responsive-styles';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: "white",
-  };
+  const styles = useStyles();
+  const deviceSize = useDeviceSize();
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
+    <SafeAreaView style={styles.container}>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle && {
-          paddingHorizontal: 32
-        }}>
-        <View
-          style={{
-            backgroundColor: "white",
-          }}>
-            <Typography variant='heading1'>Heading 1</Typography>
-            <Typography variant='heading2'>Heading 2</Typography>
-            <Typography variant='heading3'>Heading 3</Typography>
-            <MarkdownView>{markdown}</MarkdownView>
+        style={styles.containerItem}>
+        <View style={styles.containerItem}>
+          <NoteScreen />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const useStyles = CreateResponsiveStyle(
+  {
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      paddingHorizontal: 32,
+    },
+    containerItem: {
+      backgroundColor: '#fff',
+      paddingHorizontal: 16,
+    },
+    text: {
+      fontSize: 30,
+      color: 'white',
+    },
+  },
+  {
+    [DEVICE_SIZES.XL]: {
+      container: {
+        backgroundColor: '#fff',
+      },
+    },
+    [DEVICE_SIZES.SM]: {
+      container: {
+        backgroundColor: '#fff',
+      },
+    },
+  },
+);
 
 export default App;

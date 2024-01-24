@@ -1,41 +1,43 @@
-import { StyleSheet, Text } from "react-native"
+import {StyleSheet, Text} from 'react-native';
 import type {PropsWithChildren} from 'react';
 
-function getStyle(variant: TypographyVariant){
-    switch(variant){
-        case 'heading1':
-            return styles.heading1;
-        case 'heading2':
-            return styles.heading2;
-        case 'heading3':
-            return styles.heading3;
-    }
-}
-
-type TypographyVariant = 'heading1' | 'heading2' | 'heading3'
+type TypographyVariant = 'heading1' | 'heading2' | 'heading3' | 'paragraph';
 
 type TypographyProps = PropsWithChildren<{
-    variant: TypographyVariant
-}>; 
+  variant: TypographyVariant;
+}>;
 
 export const Typography = (props: TypographyProps) => {
-    return <Text style={getStyle(props.variant)}>{props.children}</Text>
-}
+  switch (props.variant) {
+    case 'heading1':
+      return <Text style={textStyles.heading1}>{props.children}</Text>;
+    case 'heading2':
+      return <Text style={textStyles.heading2}>{props.children}</Text>;
+    case 'heading3':
+      return <Text style={textStyles.heading3}>{props.children}</Text>;
+    case 'paragraph':
+      return <Text style={textStyles.paragraph}>{props.children}</Text>;
+  }
+};
 
-
-const styles = StyleSheet.create({
+export const textStyles = StyleSheet.create({
   heading1: {
-    marginTop: 32,
     fontSize: 32,
-    fontWeight: '800',
+    lineHeight: 48,
+    fontFamily: 'Rubik-Bold',
   },
   heading2: {
     fontSize: 24,
-    fontWeight: '600',
+    lineHeight: 36,
+    fontFamily: 'Rubik-SemiBold',
   },
   heading3: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  }
+    fontSize: 20,
+    lineHeight: 30,
+    fontFamily: 'Rubik-Medium',
+  },
+  paragraph: {
+    fontSize: 16,
+    fontFamily: 'Rubik-Regular',
+  },
 });

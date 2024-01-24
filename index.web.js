@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
+import {AppRegistry} from 'react-native';
+import name from './app.json';
+import App from './App';
 
-import regular from '../assets/fonts/Rubik-Regular.ttf';
-import medium from '../assets/fonts/Rubik-Medium.ttf';
-import semiBold from '../assets/fonts/Rubik-SemiBold.ttf';
-import bold from '../assets/fonts/Rubik-Bold.ttf';
+import regular from './assets/fonts/Rubik-Regular.ttf';
+import medium from './assets/fonts/Rubik-Medium.ttf';
+import semiBold from './assets/fonts/Rubik-SemiBold.ttf';
+import bold from './assets/fonts/Rubik-Bold.ttf';
 
 const regularFontStyles = `@font-face {
   src: url(${regular});
@@ -39,8 +39,8 @@ if (style.styleSheet) {
 // Inject stylesheet
 document.head.appendChild(style);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+AppRegistry.registerComponent(name, () => App);
+AppRegistry.runApplication(name, {
+  initialProps: {},
+  rootTag: document.getElementById('app-root'),
+});
