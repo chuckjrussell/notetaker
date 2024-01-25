@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Button, MarkdownView, Typography} from '..';
+import {Button, MarkdownView, ScreenHeader, Typography} from '..';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {Edit, Menu, Save} from 'react-native-feather';
 
@@ -21,7 +21,11 @@ const initialNote = `
 **boldtext**
 `;
 
-export const NoteScreen = () => {
+type NoteScreenType = {
+  onMenuPressed?: () => void;
+};
+
+export const NoteScreen = (props: NoteScreenType) => {
   const [note, setNote] = useState(initialNote);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -35,23 +39,24 @@ export const NoteScreen = () => {
 
   return (
     <>
-      <View style={styles.menuContainer}>
-        <Button onPress={() => {}}>
-          <Menu style={{height: 20}} />
-        </Button>
-        <View style={styles.menuTitle}>
-          <Typography variant="heading3">Note Name</Typography>
-        </View>
-        {isEditing ? (
-          <Button onPress={() => saveNote()}>
-            <Save style={{height: 20}} />
-          </Button>
-        ) : (
-          <Button onPress={() => editNode()}>
-            <Edit style={{height: 20}} />
-          </Button>
-        )}
-      </View>
+      <ScreenHeader
+        leftButton={{
+          onPress: () => props.onMenuPressed && props.onMenuPressed(),
+          children: <Menu style={{height: 20}} />,
+        }}
+        headerText="Note Name"
+        rightButton={
+          isEditing
+            ? {
+                onPress: () => saveNote(),
+                children: <Save style={{height: 20}} />,
+              }
+            : {
+                onPress: () => editNode(),
+                children: <Edit style={{height: 20}} />,
+              }
+        }
+      />
       <View>
         {isEditing ? (
           <TextInput
@@ -67,19 +72,3 @@ export const NoteScreen = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  menuContainer: {
-    flexDirection: 'row',
-    paddingVertical: 8,
-    marginBottom: 32,
-  },
-  menuTitle: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  menuButton: {
-    width: 100,
-  },
-});

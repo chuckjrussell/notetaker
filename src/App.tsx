@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 
-import {NoteScreen} from '@ui-library/screens';
+import {NoteMenuScreen, NoteScreen} from '@ui-library/screens';
 import {
   CreateResponsiveStyle,
   DEVICE_SIZES,
@@ -9,8 +9,9 @@ import {
 } from 'rn-responsive-styles';
 
 function App(): React.JSX.Element {
+  const [menuIsShowing, setMenuIsShowing] = useState(false);
+
   const styles = useStyles();
-  const deviceSize = useDeviceSize();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -18,8 +19,11 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={styles.containerItem}>
         <View style={styles.containerItem}>
-          <NoteScreen />
+          <NoteScreen onMenuPressed={() => setMenuIsShowing(true)} />
         </View>
+        {menuIsShowing && (
+          <NoteMenuScreen onClose={() => setMenuIsShowing(false)} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
