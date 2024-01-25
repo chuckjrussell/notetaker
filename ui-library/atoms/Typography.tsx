@@ -1,23 +1,27 @@
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, ViewStyle} from 'react-native';
 import type {PropsWithChildren} from 'react';
 
 type TypographyVariant = 'heading1' | 'heading2' | 'heading3' | 'paragraph';
 
 type TypographyProps = PropsWithChildren<{
+  style?: ViewStyle;
   variant: TypographyVariant;
 }>;
 
 export const Typography = (props: TypographyProps) => {
-  switch (props.variant) {
-    case 'heading1':
-      return <Text style={textStyles.heading1}>{props.children}</Text>;
-    case 'heading2':
-      return <Text style={textStyles.heading2}>{props.children}</Text>;
-    case 'heading3':
-      return <Text style={textStyles.heading3}>{props.children}</Text>;
-    case 'paragraph':
-      return <Text style={textStyles.paragraph}>{props.children}</Text>;
-  }
+  const getStyle = () => {
+    switch (props.variant) {
+      case 'heading1':
+        return textStyles.heading1;
+      case 'heading2':
+        return textStyles.heading2;
+      case 'heading3':
+        return textStyles.heading3;
+      case 'paragraph':
+        return textStyles.paragraph;
+    }
+  };
+  return <Text style={[getStyle(), props.style]}>{props.children}</Text>;
 };
 
 export const textStyles = StyleSheet.create({

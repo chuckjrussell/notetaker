@@ -16,11 +16,30 @@ type ButtonProps = PropsWithChildren<{
 }>;
 
 export const Button = (props: ButtonProps) => {
+  const getButtonStyle = () => {
+    switch (props.variant) {
+      case 'primary':
+        return [baseStyles.button, baseStyles.primaryButton];
+      case 'secondary':
+      default:
+        return [baseStyles.button, baseStyles.secondaryButton];
+    }
+  };
+  const getTextStyle = () => {
+    switch (props.variant) {
+      case 'primary':
+        return [baseStyles.buttonText, baseStyles.primaryButtonText];
+      case 'secondary':
+      default:
+        return [baseStyles.buttonText, baseStyles.secondaryButtonText];
+    }
+  };
+
   return (
     <TouchableOpacity
-      style={[props.style, baseStyles.button]}
+      style={[props.style, ...getButtonStyle()]}
       onPress={() => props.onPress && props.onPress()}>
-      {props.text && <Text style={baseStyles.buttonText}>{props.text}</Text>}
+      {props.text && <Text style={getTextStyle()}>{props.text}</Text>}
       {props.children}
     </TouchableOpacity>
   );
@@ -30,13 +49,26 @@ const baseStyles = StyleSheet.create({
   button: {
     fontSize: 32,
     backgroundColor: '#E8E8E9',
-    padding: 12,
+    padding: 16,
     borderRadius: 16,
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  primaryButton: {
+    backgroundColor: '#0057FF',
+  },
+  secondaryButton: {
+    backgroundColor: '#E8E8E9',
   },
   buttonText: {
-    color: '#FAD18A',
     margin: 'auto',
-    textTransform: 'uppercase',
+    color: '#1C2D4F',
     fontWeight: 'bold',
+  },
+  primaryButtonText: {
+    color: '#FAFAFA',
+  },
+  secondaryButtonText: {
+    color: '#1C2D4F',
   },
 });
