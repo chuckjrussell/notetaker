@@ -1,9 +1,14 @@
-import {TextInput} from '@ui-library/atoms/TextInput';
+import {TextInput, ScreenContainer} from '@ui-library/atoms';
 import {useState} from 'react';
-import {Button, SimpleFormLayout} from '..';
-import {StyleSheet} from 'react-native';
+import {Button, SimpleFormLayout} from '../../ui-library';
+import {RootStackParamList} from '../Navigation';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-export const SignupScreen = () => {
+interface SignupScreenProps {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+}
+
+export const SignupScreen = ({navigation}: SignupScreenProps) => {
   const [email, setEmail] = useState<string | undefined>();
   const [password, setPassword] = useState<string | undefined>();
 
@@ -12,7 +17,7 @@ export const SignupScreen = () => {
   };
 
   return (
-    <>
+    <ScreenContainer>
       <SimpleFormLayout
         headerText="Sign Up"
         buttonText="Sign Up"
@@ -29,9 +34,15 @@ export const SignupScreen = () => {
           placeholder="Password"
           onChangeText={text => setPassword(text)}
           value={password}
+          secureTextEntry={true}
         />
       </SimpleFormLayout>
-      <Button text="Log In" onPress={() => {}} />
-    </>
+      <Button
+        text="Log In"
+        onPress={() => {
+          navigation.navigate('Signin');
+        }}
+      />
+    </ScreenContainer>
   );
 };

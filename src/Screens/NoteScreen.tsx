@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Button, MarkdownView, ScreenHeader, Typography} from '..';
+import {Button, MarkdownView, ScreenHeader, Typography} from '../../ui-library';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {Edit, Menu, Save} from 'react-native-feather';
 

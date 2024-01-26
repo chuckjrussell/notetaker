@@ -55,7 +55,7 @@ const baseStyles = StyleSheet.create({
     marginVertical: 16,
   },
   primaryButton: {
-    backgroundColor: '#0057FF',
+    backgroundColor: '#A79EF1',
   },
   secondaryButton: {
     backgroundColor: '#E8E8E9',

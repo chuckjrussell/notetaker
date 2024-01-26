@@ -1,8 +1,6 @@
-import {TextInput} from '@ui-library/atoms/TextInput';
-import {PropsWithChildren, useState} from 'react';
+import {PropsWithChildren} from 'react';
 import {Button, Typography} from '..';
 import {StyleSheet} from 'react-native';
-import {child} from 'firebase/database';
 
 type SimpleFormProps = PropsWithChildren<{
   headerText: string;

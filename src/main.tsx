@@ -7,6 +7,14 @@ import medium from '../assets/fonts/Rubik-Medium.ttf';
 import semiBold from '../assets/fonts/Rubik-SemiBold.ttf';
 import bold from '../assets/fonts/Rubik-Bold.ttf';
 
+const cssOverrides = `
+html, body, root {
+  height: 100%;
+}
+* {
+  box-sizing: border-box;  
+}
+`;
 const regularFontStyles = `@font-face {
   src: url(${regular});
   font-family: 'Rubik-Regular';
@@ -34,6 +42,7 @@ if (style.styleSheet) {
   style.appendChild(document.createTextNode(mediumFontStyles));
   style.appendChild(document.createTextNode(semiFontStyles));
   style.appendChild(document.createTextNode(thinFontStyles));
+  style.appendChild(document.createTextNode(cssOverrides));
 }
 
 // Inject stylesheet

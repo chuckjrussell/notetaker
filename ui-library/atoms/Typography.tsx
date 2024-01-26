@@ -1,10 +1,10 @@
-import {StyleSheet, Text, ViewStyle} from 'react-native';
+import {StyleProp, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import type {PropsWithChildren} from 'react';
 
 type TypographyVariant = 'heading1' | 'heading2' | 'heading3' | 'paragraph';
 
 type TypographyProps = PropsWithChildren<{
-  style?: ViewStyle;
+  style?: StyleProp<TextStyle>;
   variant: TypographyVariant;
 }>;
 

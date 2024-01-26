@@ -1,5 +1,5 @@
 import {View, StyleSheet} from 'react-native';
-import {ScreenHeader, Typography} from '..';
+import {ScreenHeader, Typography} from '../../ui-library';
 import {X} from 'react-native-feather';
 
 type NoteMenuScreenType = {
