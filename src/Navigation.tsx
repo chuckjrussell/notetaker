@@ -1,17 +1,14 @@
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {
-  NoteScreen,
-  SigninScreen,
-  SignupScreen,
-  Typography,
-} from '@ui-library/index';
+import {NoteScreen, SigninScreen, SignupScreen, HomeScreen} from './Screens';
 import {appConfig} from '../config';
 import {useUserProvider} from './firebase/UserProvider';
+import {Typography} from '@ui-library';
 
 export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
+  Home: undefined;
   Note: undefined;
 };
 
@@ -22,6 +19,7 @@ const linking = {
   screens: {
     Signin: 'Signin',
     Signup: 'Signup',
+    Home: 'Home',
     Note: 'Note',
   },
 };
@@ -46,6 +44,7 @@ export const Navigation = () => {
         }}>
         {loggedInUser ? (
           <>
+            <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Note" component={NoteScreen} />
           </>
         ) : (
