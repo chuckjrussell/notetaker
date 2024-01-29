@@ -1,6 +1,7 @@
 export const theme = {
     borders: {
-        radius: 16
+        radius: 16,
+        width: 2
     }
 }
 

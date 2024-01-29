@@ -34,8 +34,9 @@ export const InfoPanel = (props: InfoPanelProps) => {
 
 const styles = StyleSheet.create({
   box: {
-    padding: 8,
+    padding: 16,
     borderRadius: theme.borders.radius,
+    marginVertical: 8,
   },
   text: {},
   errorBox: {
