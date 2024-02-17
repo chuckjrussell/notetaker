@@ -1,5 +1,5 @@
 import {User, onAuthStateChanged} from 'firebase/auth';
-import {ReactNode, createContext, useContext, useState} from 'react';
+import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
 import {auth} from './firebase.config';
 
 type UserContextType = {
@@ -14,9 +14,12 @@ type UserProviderProps = {
 export const UserProvider = ({children}: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
-  onAuthStateChanged(auth, user => {
-    setUser(user);
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, user => {
+      console.log('Auth State Changed: ', user);
+      setUser(user);
+    });
+  }, []);
 
   return (
     <UserContext.Provider value={{loggedInUser: user}}>

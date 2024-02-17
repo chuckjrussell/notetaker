@@ -17,8 +17,8 @@ interface SigninScreenProps {
 }
 
 export const SigninScreen = ({navigation}: SigninScreenProps) => {
-  const [email, setEmail] = useState<string | undefined>();
-  const [password, setPassword] = useState<string | undefined>();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
 

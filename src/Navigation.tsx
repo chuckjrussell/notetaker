@@ -25,8 +25,7 @@ const linking = {
 };
 
 export const Navigation = () => {
-  //const {loggedInUser} = useUserProvider();
-  const loggedInUser = false;
+  const {loggedInUser} = useUserProvider();
 
   return (
     <NavigationContainer
