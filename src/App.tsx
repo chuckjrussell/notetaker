@@ -12,9 +12,9 @@ function App(): React.JSX.Element {
   return (
     <ThemeProvider>
       <SafeAreaView style={styles.container}>
-        <UserProvider>
-          <Navigation />
-        </UserProvider>
+        {/* <UserProvider> */}
+        <Navigation />
+        {/* </UserProvider> */}
       </SafeAreaView>
     </ThemeProvider>
   );

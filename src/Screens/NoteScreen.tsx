@@ -2,6 +2,9 @@ import {useState} from 'react';
 import {Button, MarkdownView, ScreenHeader, Typography} from '../../ui-library';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {Edit, Menu, Save} from 'react-native-feather';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../Navigation';
+import {RouteProp} from '@react-navigation/native';
 
 const initialNote = `
 # MD Heading 1
@@ -21,13 +24,21 @@ const initialNote = `
 **boldtext**
 `;
 
-type NoteScreenType = {
+interface NoteScreenProps {
   onMenuPressed?: () => void;
-};
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Note'>;
+  route: RouteProp<RootStackParamList, 'Note'>;
+}
 
-export const NoteScreen = (props: NoteScreenType) => {
+export const NoteScreen = ({
+  onMenuPressed,
+  navigation,
+  route,
+}: NoteScreenProps) => {
   const [note, setNote] = useState(initialNote);
   const [isEditing, setIsEditing] = useState(false);
+
+  const {id} = route.params;
 
   const saveNote = () => {
     setIsEditing(false);
@@ -41,10 +52,10 @@ export const NoteScreen = (props: NoteScreenType) => {
     <>
       <ScreenHeader
         leftButton={{
-          onPress: () => props.onMenuPressed && props.onMenuPressed(),
+          onPress: () => onMenuPressed && onMenuPressed(),
           children: <Menu style={{height: 20}} />,
         }}
-        headerText="Note Name"
+        headerText={`Note ${id}`}
         rightButton={
           isEditing
             ? {

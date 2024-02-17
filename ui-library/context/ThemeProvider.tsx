@@ -1,20 +1,26 @@
-import {PropsWithChildren, ReactNode, createContext, useState} from 'react';
-import {ThemeType, theme} from './theme';
+import {
+  PropsWithChildren,
+  ReactNode,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
+import {ThemeType, baseTheme} from './theme';
 
 type ThemeContextType = {
-  theme?: ThemeType;
+  theme: ThemeType;
   setTheme: (theme: ThemeType) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: theme,
+  theme: baseTheme,
   setTheme: () => {},
 });
 
 export const ThemeProvider = (
   props: PropsWithChildren<{theme?: ThemeType}>,
 ) => {
-  const [currentTheme, setCurrentTheme] = useState(theme);
+  const [currentTheme, setCurrentTheme] = useState(baseTheme);
   return (
     <ThemeContext.Provider
       value={{theme: currentTheme, setTheme: setCurrentTheme}}>
@@ -22,3 +28,5 @@ export const ThemeProvider = (
     </ThemeContext.Provider>
   );
 };
+
+export const useThemeProvider = () => useContext(ThemeContext);

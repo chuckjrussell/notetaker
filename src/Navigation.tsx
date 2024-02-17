@@ -9,7 +9,7 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   Home: undefined;
-  Note: undefined;
+  Note: {id: number};
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -20,12 +20,13 @@ const linking = {
     Signin: 'Signin',
     Signup: 'Signup',
     Home: 'Home',
-    Note: 'Note',
+    Note: 'Note/:id',
   },
 };
 
 export const Navigation = () => {
-  const {loggedInUser} = useUserProvider();
+  //const {loggedInUser} = useUserProvider();
+  const loggedInUser = false;
 
   return (
     <NavigationContainer

@@ -1,13 +1,10 @@
+import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ReactNode} from 'react';
 import {View} from 'react-native';
-import {
-  CreateResponsiveStyle,
-  minSize,
-  DEVICE_SIZES,
-} from 'rn-responsive-styles';
+import {minSize, DEVICE_SIZES} from 'rn-responsive-styles';
 
 export const ScreenContainer = ({children}: {children?: ReactNode}) => {
-  const styles = useStyles();
+  const styles = themedStyles();
 
   return (
     <View style={styles.outerContainer}>
@@ -16,8 +13,8 @@ export const ScreenContainer = ({children}: {children?: ReactNode}) => {
   );
 };
 
-const useStyles = CreateResponsiveStyle(
-  {
+const themedStyles = CreateThemedStyle(theme => ({
+  defaultStyle: {
     outerContainer: {
       height: '100%',
     },
@@ -34,11 +31,11 @@ const useStyles = CreateResponsiveStyle(
       },
     },
   },
-  {
+  overrideStyles: {
     [minSize(DEVICE_SIZES.LG)]: {
       outerContainer: {
         paddingLeft: 400,
-        backgroundColor: '#rgb(245,237,255)',
+        backgroundColor: theme.palette.primaryColor.light,
       },
       container: {
         paddingHorizontal: '20%',
@@ -46,4 +43,4 @@ const useStyles = CreateResponsiveStyle(
       },
     },
   },
-);
+}));

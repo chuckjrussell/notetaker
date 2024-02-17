@@ -1,4 +1,4 @@
-import {theme} from '@ui-library/context/theme';
+import {baseTheme} from '@ui-library/context/theme';
 import {PropsWithChildren} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Typography} from '.';
@@ -35,7 +35,7 @@ export const InfoPanel = (props: InfoPanelProps) => {
 const styles = StyleSheet.create({
   box: {
     padding: 16,
-    borderRadius: theme.borders.radius,
+    borderRadius: baseTheme.borders.radius,
     marginVertical: 8,
   },
   text: {},
