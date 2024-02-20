@@ -6,4 +6,3 @@ export {Label} from './Label';
 export {ScreenContainer} from './ScreenContainer';
 export {ScreenWrapper} from './ScreenWrapper';
 export {InfoPanel} from './InfoPanel';
-export {VectorIcon} from './VectorIcon';
