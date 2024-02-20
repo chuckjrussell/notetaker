@@ -6,6 +6,15 @@ import Markdown from 'react-native-markdown-display';
 export const MarkdownView = ({children}: PropsWithChildren) => {
   return (
     <Markdown
+      style={{
+        body: {
+          color: '#ffffff',
+          fontFamily: 'Rubik-Regular',
+        },
+        paragraph: {
+          color: '#ffffff',
+        },
+      }}
       rules={{
         heading1: (node, children) => (
           <Typography key={node.key} variant="heading1">
@@ -23,8 +32,7 @@ export const MarkdownView = ({children}: PropsWithChildren) => {
           </Typography>
         ),
       }}
-      style={StyleSheet.create({})}
-      mergeStyle={false}>
+      mergeStyle={true}>
       {children}
     </Markdown>
   );

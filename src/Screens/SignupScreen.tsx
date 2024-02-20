@@ -1,4 +1,4 @@
-import {TextInput, ScreenContainer, InfoPanel} from '@ui-library/atoms';
+import {TextInput, ScreenContainer, InfoPanel, Label} from '@ui-library/atoms';
 import {useState} from 'react';
 import {Button, SimpleFormLayout} from '../../ui-library';
 import {RootStackParamList} from '../Navigation';
@@ -42,25 +42,31 @@ export const SignupScreen = ({navigation}: SignupScreenProps) => {
         buttonText="Sign Up"
         onFormSubmission={handleSignup}>
         {error && <InfoPanel variant="error" text={error} />}
+        <Label label="Email" />
         <TextInput
-          label="Email"
           placeholder="Email"
           onChangeText={text => setEmail(text)}
           value={email}
+          secureTextEntry={false}
           autoCapitalize="none"
+          variant="form-field"
         />
+        <Label label="Password" />
         <TextInput
-          label="Password"
           placeholder="Password"
           onChangeText={text => setPassword(text)}
           value={password}
           secureTextEntry={true}
+          variant="form-field"
         />
       </SimpleFormLayout>
       <Button
         text="Log In"
         onPress={() => {
           navigation.navigate('Signin');
+        }}
+        style={{
+          marginTop: 24,
         }}
       />
     </ScreenContainer>

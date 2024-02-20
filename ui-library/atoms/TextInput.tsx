@@ -1,41 +1,50 @@
 import {
   TextInput as RNTextInput,
-  TextInputProps,
+  TextInputProps as RNInputProps,
   StyleSheet,
   View,
+  StyleProp,
+  TextStyle,
 } from 'react-native';
 import {Typography} from '.';
+import {CreateThemedStyle} from '@ui-library/context/theme';
+import {useThemeProvider} from '@ui-library/context/ThemeProvider';
 
-export const TextInput = (
-  props: TextInputProps & {
-    label?: string;
-  },
-) => {
-  const {style: styleProps, label, ...rest} = props;
+type TextInputProps = {
+  variant?: 'form-field';
+} & RNInputProps;
+
+export const TextInput = (props: TextInputProps) => {
+  const styles = themedStyles();
+  const {theme} = useThemeProvider();
+  const {variant, style: styleProps, ...rest} = props;
+  const inputStyles: StyleProp<TextStyle> = [styles.inputField];
+  if (variant === 'form-field') {
+    inputStyles.push(styles.formField);
+  }
   return (
-    <View style={styles.container}>
-      {label && (
-        <Typography style={styles.label} variant="heading3">
-          {label}
-        </Typography>
-      )}
-      <RNTextInput style={[styles.inputField, props.style]} {...rest} />
-    </View>
+    <RNTextInput
+      style={[...inputStyles, props.style]}
+      placeholderTextColor={theme.palette.gray.veryLight}
+      {...rest}
+    />
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 16,
+const themedStyles = CreateThemedStyle(theme => ({
+  defaultStyle: {
+    inputField: {
+      backgroundColor: theme.palette.gray.dark,
+      color: theme.palette.white,
+      borderRadius: theme.borders.radius,
+      borderColor: theme.palette.gray.light,
+      borderStyle: 'solid',
+      borderWidth: 2,
+      paddingHorizontal: 20,
+      paddingVertical: 12,
+    },
+    formField: {
+      marginBottom: 24,
+    },
   },
-  label: {
-    marginBottom: 8,
-  },
-  inputField: {
-    borderRadius: 16,
-    borderColor: '#E0E0E0',
-    borderStyle: 'solid',
-    borderWidth: 2,
-    padding: 16,
-  },
-});
+}));

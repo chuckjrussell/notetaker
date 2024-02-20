@@ -4,18 +4,11 @@ import {Card, Typography} from '../atoms';
 interface NoteCardProps {
   header: string;
   content: string;
-  footer: string;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 }
 
-export const NoteCard = ({
-  header,
-  content,
-  footer,
-  style,
-  onPress,
-}: NoteCardProps) => {
+export const NoteCard = ({header, content, style, onPress}: NoteCardProps) => {
   return (
     <TouchableOpacity
       style={style}
@@ -25,7 +18,6 @@ export const NoteCard = ({
       <Card>
         <Typography variant="heading3">{header}</Typography>
         <Typography variant="paragraph">{content}</Typography>
-        <Typography variant="paragraph">{footer}</Typography>
       </Card>
     </TouchableOpacity>
   );

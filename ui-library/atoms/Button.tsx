@@ -1,3 +1,4 @@
+import {CreateThemedStyle} from '@ui-library/context/theme';
 import {PropsWithChildren} from 'react';
 import {
   StyleProp,
@@ -16,6 +17,8 @@ type ButtonProps = PropsWithChildren<{
 }>;
 
 export const Button = (props: ButtonProps) => {
+  const baseStyles = themedStyles();
+
   const getButtonStyle = () => {
     switch (props.variant) {
       case 'primary':
@@ -45,30 +48,35 @@ export const Button = (props: ButtonProps) => {
   );
 };
 
-const baseStyles = StyleSheet.create({
-  button: {
-    fontSize: 32,
-    backgroundColor: '#E8E8E9',
-    padding: 16,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginVertical: 16,
+const themedStyles = CreateThemedStyle(theme => ({
+  defaultStyle: {
+    button: {
+      fontSize: 32,
+      backgroundColor: theme.palette.gray.dark,
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      borderRadius: theme.borders.radius,
+      alignItems: 'center',
+    },
+    primaryButton: {
+      backgroundColor: theme.palette.primary.medium,
+    },
+    secondaryButton: {
+      backgroundColor: theme.palette.gray.dark,
+      borderWidth: 2,
+      borderStyle: 'solid',
+      borderColor: theme.palette.gray.light,
+    },
+    buttonText: {
+      margin: 'auto',
+      color: theme.palette.white,
+      fontWeight: 'bold',
+    },
+    primaryButtonText: {
+      color: theme.palette.white,
+    },
+    secondaryButtonText: {
+      color: theme.palette.white,
+    },
   },
-  primaryButton: {
-    backgroundColor: '#A79EF1',
-  },
-  secondaryButton: {
-    backgroundColor: '#E8E8E9',
-  },
-  buttonText: {
-    margin: 'auto',
-    color: '#1C2D4F',
-    fontWeight: 'bold',
-  },
-  primaryButtonText: {
-    color: '#FAFAFA',
-  },
-  secondaryButtonText: {
-    color: '#1C2D4F',
-  },
-});
+}));

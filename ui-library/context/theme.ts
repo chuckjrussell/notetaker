@@ -3,19 +3,38 @@ import {CreateResponsiveStyle, DEVICE_SIZES} from 'rn-responsive-styles';
 import {MEDIA_QUERY} from 'rn-responsive-styles/lib/types';
 import {useThemeProvider} from './ThemeProvider';
 
-export const baseTheme = {
-  borders: {
-    radius: 16,
-    width: 2,
+export const basePalette = {
+  gray: {
+    dark: '#161616',
+    medium: '#2D2D2D',
+    light: '#3F3F3F',
+    veryLight: '#8C8C8C',
   },
-  palette: {
-    primaryColor: {
-      normal: '#A79EF1',
-      light: '#rgb(245,237,255)',
-    },
+  white: '#FFFFFF',
+  primary: {
+    medium: '#8E07F1',
   },
 };
 
+export const baseTheme = {
+  application: {
+    backgroundColor: basePalette.gray.dark,
+  },
+  panel: {
+    backgroundColor: basePalette.gray.medium,
+    margin: 12,
+  },
+  text: {
+    color: basePalette.white,
+  },
+  borders: {
+    radius: 24,
+    width: 2,
+  },
+  palette: basePalette,
+};
+
+export type PaletteType = typeof basePalette;
 export type ThemeType = typeof baseTheme;
 
 type ThemeInjectionType<DefaultStyles, OverrideStyles> = (theme: ThemeType) => {

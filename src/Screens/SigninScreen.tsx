@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {
   Button,
   InfoPanel,
+  Label,
   ScreenContainer,
   SimpleFormLayout,
 } from '../../ui-library';
@@ -48,26 +49,31 @@ export const SigninScreen = ({navigation}: SigninScreenProps) => {
         buttonText="Sign In"
         onFormSubmission={handleSignin}>
         {error && <InfoPanel variant="error" text={error} />}
+        <Label label="Email" />
         <TextInput
-          label="Email"
           placeholder="Email"
           onChangeText={text => setEmail(text)}
           value={email}
           secureTextEntry={false}
           autoCapitalize="none"
+          variant="form-field"
         />
+        <Label label="Password" />
         <TextInput
-          label="Password"
           placeholder="Password"
           onChangeText={text => setPassword(text)}
           value={password}
           secureTextEntry={true}
+          variant="form-field"
         />
       </SimpleFormLayout>
       <Button
         text="Sign Up"
         onPress={() => {
           navigation.navigate('Signup');
+        }}
+        style={{
+          marginTop: 24,
         }}
       />
     </ScreenContainer>

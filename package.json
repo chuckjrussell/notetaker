@@ -22,7 +22,6 @@
     "react-native-markdown-display": "^7.0.2",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
-    "react-native-svg": "^14.1.0",
     "react-native-web": "^0.19.9",
     "rn-responsive-styles": "^2.2.0"
   },

@@ -8,7 +8,7 @@ import {Typography} from '@ui-library';
 export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
-  Home: undefined;
+  Home: {noteId?: number};
   Note: {id: number};
 };
 
@@ -19,13 +19,14 @@ const linking = {
   screens: {
     Signin: 'Signin',
     Signup: 'Signup',
-    Home: 'Home',
+    Home: 'Home/:noteId',
     Note: 'Note/:id',
   },
 };
 
 export const Navigation = () => {
-  const {loggedInUser} = useUserProvider();
+  const {loggedInUser, initialized} = useUserProvider();
+  if (!initialized) return null;
 
   return (
     <NavigationContainer
@@ -45,7 +46,6 @@ export const Navigation = () => {
         {loggedInUser ? (
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Note" component={NoteScreen} />
           </>
         ) : (
           <>

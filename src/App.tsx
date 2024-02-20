@@ -5,6 +5,7 @@ import {CreateResponsiveStyle, DEVICE_SIZES} from 'rn-responsive-styles';
 import {ThemeProvider} from '@ui-library/context/ThemeProvider';
 import {Navigation} from './Navigation';
 import {UserProvider} from './firebase/UserProvider';
+import {baseTheme} from '@ui-library/context/theme';
 
 function App(): React.JSX.Element {
   const styles = useStyles();
@@ -24,7 +25,7 @@ const useStyles = CreateResponsiveStyle(
   {
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: baseTheme.palette.gray.dark,
       paddingHorizontal: 32,
       height: '100%',
     },

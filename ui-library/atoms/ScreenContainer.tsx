@@ -21,7 +21,7 @@ const themedStyles = CreateThemedStyle(theme => ({
     container: {
       height: '100%',
       paddingHorizontal: 32,
-      backgroundColor: '#fff',
+      backgroundColor: theme.application.backgroundColor,
       flexGrow: 1,
       shadowOpacity: 100,
       shadowRadius: 20,
@@ -34,12 +34,11 @@ const themedStyles = CreateThemedStyle(theme => ({
   overrideStyles: {
     [minSize(DEVICE_SIZES.LG)]: {
       outerContainer: {
-        paddingLeft: 400,
-        backgroundColor: theme.palette.primaryColor.light,
+        paddingLeft: '45%',
+        backgroundColor: theme.palette.primary.medium,
       },
       container: {
         paddingHorizontal: '20%',
-        backgroundColor: '#fff',
       },
     },
   },
