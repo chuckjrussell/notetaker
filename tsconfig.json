@@ -1,6 +1,7 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
+    "types": ["vite-plugin-svgr/client"],
     "lib": ["es5", "es6", "dom"],
     "baseUrl": ".",
     "paths": {

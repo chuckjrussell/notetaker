@@ -9,6 +9,7 @@ interface ScreenHeaderFiltersProps {
   onTagsChanged?: (newTags?: string[]) => void;
   onTextSearchChanged?: (newSearch: string) => void;
   onSignout?: () => void;
+  onMenuPressed?: () => void;
 }
 
 export const ScreenHeaderFilters = ({
@@ -35,8 +36,15 @@ export const ScreenHeaderFilters = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        {isLargerThan(DEVICE_SIZES.MD) && (
+        {isLargerThan(DEVICE_SIZES.MD) ? (
           <TagSelector tags={tags} onTagsChanged={onTagsChanged} allSelector />
+        ) : (
+          <Button
+            text="Menu"
+            onPress={() => {
+              onSignout && onSignout();
+            }}
+          />
         )}
 
         <Button

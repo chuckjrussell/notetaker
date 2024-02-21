@@ -7,7 +7,7 @@ import {FlatList, TouchableOpacity, View} from 'react-native';
 import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ScreenHeaderFilters} from '@ui-library/organisms/ScreenHeaderFilter';
-import {MarkdownView} from '@ui-library/molecules';
+import {EditableMarkdownView, MarkdownView} from '@ui-library/molecules';
 import {initialNote, notes} from '../mocks/data';
 import {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
@@ -24,7 +24,7 @@ export const HorizontalRule = () => {
 
 export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
   const styles = themedStyles();
-  const {isSmallerThan, isSize} = useSizeRender();
+  const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
   const {noteId: selectedNoteId} = route.params || {noteId: undefined}; //sad that I need to do this :(
   const allNotes = notes;
@@ -46,40 +46,42 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
         }}
       />
       <View style={styles.pageWrapper}>
-        <View style={styles.panel}>
-          <Typography
-            style={{paddingHorizontal: 20, marginBottom: 20}}
-            variant="heading2">
-            Notes
-          </Typography>
-          <FlatList
-            style={styles.noteList}
-            data={allNotes}
-            renderItem={note => (
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate('Home', {
-                    noteId: note.item.id,
-                  });
-                }}
-                style={[
-                  styles.note,
-                  ...(note.item.id === selectedNoteId
-                    ? [styles.selectedNote]
-                    : []),
-                ]}
-                key={note.item.id}>
-                <Typography style={{marginLeft: 20}} variant="paragraph">
-                  {note.item.title}
-                </Typography>
-                <Typography style={{marginRight: 20}} variant="paragraph">
-                  {note.item.category}
-                </Typography>
-              </TouchableOpacity>
-            )}
-            ItemSeparatorComponent={HorizontalRule}
-          />
-        </View>
+        {isLargerThan(DEVICE_SIZES.MD) && (
+          <View style={[styles.panel]}>
+            <Typography
+              style={{paddingHorizontal: 20, marginBottom: 20}}
+              variant="heading2">
+              Notes
+            </Typography>
+            <FlatList
+              style={styles.noteList}
+              data={allNotes}
+              renderItem={note => (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Home', {
+                      noteId: note.item.id,
+                    });
+                  }}
+                  style={[
+                    styles.note,
+                    ...(note.item.id === selectedNoteId
+                      ? [styles.selectedNote]
+                      : []),
+                  ]}
+                  key={note.item.id}>
+                  <Typography style={{marginLeft: 20}} variant="paragraph">
+                    {note.item.title}
+                  </Typography>
+                  <Typography style={{marginRight: 20}} variant="paragraph">
+                    {note.item.category}
+                  </Typography>
+                </TouchableOpacity>
+              )}
+              ItemSeparatorComponent={HorizontalRule}
+            />
+          </View>
+        )}
         {/* Active Notes Panel: Should NOT render if there is no content (no selected id) 
           Also should not render if its in two panel layout and not active
         */}
@@ -94,11 +96,14 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
                     {selectedNote.title}
                   </Typography>
                   <View style={{margin: 20}}>
-                    <MarkdownView>{selectedNote.content}</MarkdownView>
+                    <EditableMarkdownView
+                      initialMarkdown={selectedNote.content}
+                    />
                   </View>
                 </>
               ) : (
-                <Typography variant="heading1">No Note Selected</Typography>
+                <></>
+                // <Icon iconType="spellBook" style={styles.noNoteSelectedIcon} />
               )}
             </View>
             {isSize(DEVICE_SIZES.LG) && (
@@ -126,7 +131,7 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
                 Session Notes
               </Typography>
               <View style={{margin: 20}}>
-                <MarkdownView>{initialNote}</MarkdownView>
+                <EditableMarkdownView initialMarkdown={initialNote} />
               </View>
             </View>
             {isSize(DEVICE_SIZES.LG) && (
@@ -157,7 +162,6 @@ const themedStyles = CreateThemedStyle(theme => ({
       backgroundColor: theme.palette.gray.medium,
       borderRadius: theme.borders.radius,
       width: '100%',
-      height: '100%',
       paddingVertical: 20,
       margin: theme.panel.margin,
     },
@@ -179,6 +183,11 @@ const themedStyles = CreateThemedStyle(theme => ({
       height: 1,
       width: '100%',
       backgroundColor: theme.palette.gray.light,
+    },
+    noNoteSelectedIcon: {
+      width: '60%',
+      margin: 'auto',
+      color: theme.palette.gray.light,
     },
   },
   overrideStyles: {
