@@ -12,13 +12,14 @@
     "test": "jest"
   },
   "dependencies": {
-    "@react-navigation/native": "^6.1.9",
-    "@react-navigation/native-stack": "^6.9.17",
+    "@react-navigation/native": "6.1.10",
+    "@react-navigation/stack": "6.3.21",
     "firebase": "^10.7.2",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
     "react-native": "0.73.1",
     "react-native-feather": "^1.1.2",
+    "react-native-gesture-handler": "^2.15.0",
     "react-native-markdown-display": "^7.0.2",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",

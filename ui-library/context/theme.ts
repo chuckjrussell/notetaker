@@ -22,7 +22,8 @@ export const baseTheme = {
   },
   panel: {
     backgroundColor: basePalette.gray.medium,
-    margin: 12,
+    marginVertical: 12,
+    gap: 24,
   },
   text: {
     color: basePalette.white,

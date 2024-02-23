@@ -8,9 +8,14 @@ import semiBold from '../assets/fonts/Rubik-SemiBold.ttf';
 import bold from '../assets/fonts/Rubik-Bold.ttf';
 
 const cssOverrides = `
-html, body, root {
-  height: 100%;
+html, body, #root {
+  height: 100vh;
 }
+
+#root {
+  display:flex;
+}
+
 * {
   box-sizing: border-box;  
 }

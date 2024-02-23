@@ -1,14 +1,14 @@
 import {TextInput, ScreenContainer, InfoPanel, Label} from '@ui-library/atoms';
 import {useState} from 'react';
 import {Button, SimpleFormLayout} from '../../ui-library';
-import {RootStackParamList} from '../Navigation';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../NavigationTypes';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
 import {getErrorMessageFromCode} from '../firebase/authErrorCodes';
 
 interface SignupScreenProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Signup'>;
 }
 
 export const SignupScreen = ({navigation}: SignupScreenProps) => {

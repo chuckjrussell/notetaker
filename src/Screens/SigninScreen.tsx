@@ -7,14 +7,14 @@ import {
   ScreenContainer,
   SimpleFormLayout,
 } from '../../ui-library';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../NavigationTypes';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
 import {getErrorMessageFromCode} from '../firebase/authErrorCodes';
 
 interface SigninScreenProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Signin'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Signin'>;
 }
 
 export const SigninScreen = ({navigation}: SigninScreenProps) => {

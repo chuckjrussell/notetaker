@@ -1,59 +1,53 @@
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {NoteScreen, SigninScreen, SignupScreen, HomeScreen} from './Screens';
+import {NavigationContainer, LinkingOptions} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {SigninScreen, SignupScreen, NotesScreen} from './Screens';
 import {appConfig} from '../config';
 import {useUserProvider} from './firebase/UserProvider';
-import {Typography} from '@ui-library';
+import {RootStackParamList} from './NavigationTypes';
+import {DemoScreen} from './Screens/DemoScreen';
 
-export type RootStackParamList = {
-  Signin: undefined;
-  Signup: undefined;
-  Home: {noteId?: number};
-  Note: {id: number};
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
-const linking = {
-  prefixes: [appConfig.url, appConfig.deeplinkPrefix, 'http://localhost:5173/'],
-  screens: {
-    Signin: 'Signin',
-    Signup: 'Signup',
-    Home: 'Home/:noteId',
-    Note: 'Note/:id',
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: [appConfig.deeplinkPrefix],
+  config: {
+    initialRouteName: 'Demo',
+    screens: {
+      Home: 'Home',
+      Demo: 'Demo',
+      Signin: 'Signin',
+      Signup: 'Signup',
+    },
   },
 };
 
 export const Navigation = () => {
+  return (
+    <NavigationContainer linking={linking}>
+      <MainStack />
+    </NavigationContainer>
+  );
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
+
+const MainStack = () => {
   const {loggedInUser, initialized} = useUserProvider();
   if (!initialized) return null;
-
   return (
-    <NavigationContainer
-      linking={linking}
-      fallback={<Typography variant="heading3">Loading...</Typography>}
-      theme={{
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: '#fff',
-        },
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
       }}>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        {loggedInUser ? (
-          <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Signin" component={SigninScreen} />
-            <Stack.Screen name="Signup" component={SignupScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+      {loggedInUser ? (
+        <>
+          <Stack.Screen name="Home" component={NotesScreen} />
+          <Stack.Screen name="Demo" component={DemoScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Signin" component={SigninScreen} />
+          <Stack.Screen name="Signup" component={SignupScreen} />
+        </>
+      )}
+    </Stack.Navigator>
   );
 };

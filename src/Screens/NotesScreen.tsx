@@ -1,5 +1,5 @@
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../Navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../NavigationTypes';
 import {Button, ScreenWrapper, Typography} from '@ui-library/atoms';
 import {signOut} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
@@ -7,13 +7,14 @@ import {FlatList, TouchableOpacity, View} from 'react-native';
 import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ScreenHeaderFilters} from '@ui-library/organisms/ScreenHeaderFilter';
-import {EditableMarkdownView, MarkdownView} from '@ui-library/molecules';
+import {EditableMarkdownView} from '@ui-library/molecules';
 import {initialNote, notes} from '../mocks/data';
 import {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
+import {Icon} from '@ui-library/atoms/Icon';
 
-interface HomeScreenProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
+interface NotesScreenProps {
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
   route: RouteProp<RootStackParamList, 'Home'>;
 }
 
@@ -22,10 +23,14 @@ export const HorizontalRule = () => {
   return <View style={styles.horizontalRule}></View>;
 };
 
-export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
+export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
   const styles = themedStyles();
   const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
+
+  console.log(JSON.stringify(route.params));
+  console.log(JSON.stringify(navigation.getState(), null, 2));
+
   const {noteId: selectedNoteId} = route.params || {noteId: undefined}; //sad that I need to do this :(
   const allNotes = notes;
   const selectedNote = allNotes.find(n => n.id === selectedNoteId) || undefined;
@@ -59,7 +64,11 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
               renderItem={note => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate('Home', {
+                    console.log(`navigation to: noteId: ${note.item.id}`);
+                    // navigation.push('Notes', {
+                    //   noteId: note.item.id,
+                    // });
+                    navigation.setParams({
                       noteId: note.item.id,
                     });
                   }}
@@ -102,16 +111,16 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
                   </View>
                 </>
               ) : (
-                <></>
-                // <Icon iconType="spellBook" style={styles.noNoteSelectedIcon} />
+                // <></>
+                <Icon iconType="spellBook" style={styles.noNoteSelectedIcon} />
               )}
             </View>
-            {isSize(DEVICE_SIZES.LG) && (
+            {isSmallerThan(DEVICE_SIZES.XL) && (
               <Button
                 onPress={() => setIsSessionActive(true)}
                 style={{
-                  margin: 'auto',
                   marginBottom: 20,
+                  alignSelf: 'center',
                 }}
                 variant="primary"
                 text="Switch to session"
@@ -134,12 +143,12 @@ export const HomeScreen = ({navigation, route}: HomeScreenProps) => {
                 <EditableMarkdownView initialMarkdown={initialNote} />
               </View>
             </View>
-            {isSize(DEVICE_SIZES.LG) && (
+            {isSmallerThan(DEVICE_SIZES.XL) && (
               <Button
                 onPress={() => setIsSessionActive(false)}
                 style={{
-                  margin: 'auto',
                   marginBottom: 20,
+                  alignSelf: 'center',
                 }}
                 variant="primary"
                 text="Switch to note"
@@ -156,6 +165,7 @@ const themedStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
     pageWrapper: {
       flexDirection: 'row',
+      gap: theme.panel.gap,
       flexGrow: 1,
     },
     panel: {
@@ -163,7 +173,7 @@ const themedStyles = CreateThemedStyle(theme => ({
       borderRadius: theme.borders.radius,
       width: '100%',
       paddingVertical: 20,
-      margin: theme.panel.margin,
+      marginVertical: theme.panel.marginVertical,
     },
     contentPanel: {},
     noteList: {
@@ -188,6 +198,7 @@ const themedStyles = CreateThemedStyle(theme => ({
       width: '60%',
       margin: 'auto',
       color: theme.palette.gray.light,
+      alignSelf: 'center',
     },
   },
   overrideStyles: {

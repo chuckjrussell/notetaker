@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import {Dimensions, SafeAreaView} from 'react-native';
 
 import {CreateResponsiveStyle, DEVICE_SIZES} from 'rn-responsive-styles';
 import {ThemeProvider} from '@ui-library/context/ThemeProvider';
@@ -21,27 +21,12 @@ function App(): React.JSX.Element {
   );
 }
 
-const useStyles = CreateResponsiveStyle(
-  {
-    container: {
-      flex: 1,
-      backgroundColor: baseTheme.palette.gray.dark,
-      paddingHorizontal: 32,
-      height: '100%',
-    },
+const useStyles = CreateResponsiveStyle({
+  container: {
+    backgroundColor: baseTheme.palette.gray.dark,
+    paddingHorizontal: 32,
+    flexGrow: 1,
   },
-  {
-    [DEVICE_SIZES.XL]: {
-      container: {
-        backgroundColor: '#fff',
-      },
-    },
-    [DEVICE_SIZES.SM]: {
-      container: {
-        backgroundColor: '#fff',
-      },
-    },
-  },
-);
+});
 
 export default App;

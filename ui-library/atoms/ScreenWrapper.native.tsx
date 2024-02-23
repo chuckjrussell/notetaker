@@ -1,11 +1,20 @@
 import {CreateThemedStyle} from '@ui-library/context/theme';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView} from 'react-native';
 
+/**
+ * We need to use a different ScreenWrapper in native than web thanks to some
+ * delightful web/native flex fun
+ * @param children
+ * @returns
+ */
 export const ScreenWrapper = ({children}: {children: React.ReactNode}) => {
   const styles = themedStyles();
 
-  // return <ScrollView style={styles.container}>{children}</ScrollView>;
-  return <View style={styles.container}>{children}</View>;
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>
+      {children}
+    </ScrollView>
+  );
 };
 
 const themedStyles = CreateThemedStyle(theme => ({

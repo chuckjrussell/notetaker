@@ -1,4 +1,4 @@
 export const appConfig = {
-  url: 'https://notetaker-app.com',
+  url: 'http://localhost',
   deeplinkPrefix: 'mychat://',
 };
