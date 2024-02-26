@@ -9,9 +9,10 @@ import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ScreenHeaderFilters} from '@ui-library/organisms/ScreenHeaderFilter';
 import {EditableMarkdownView} from '@ui-library/molecules';
 import {initialNote, notes} from '../mocks/data';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {Icon} from '@ui-library/atoms/Icon';
+import firestore from '../firebase/firestore';
 
 interface NotesScreenProps {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
@@ -28,8 +29,9 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
   const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
 
-  console.log(JSON.stringify(route.params));
-  console.log(JSON.stringify(navigation.getState(), null, 2));
+  firestore
+    .getUsers()
+    .then(data => console.log(`users data: ${JSON.stringify(data)}`));
 
   const {noteId: selectedNoteId} = route.params || {noteId: undefined}; //sad that I need to do this :(
   const allNotes = notes;
@@ -106,6 +108,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
                   </Typography>
                   <View style={{margin: 20}}>
                     <EditableMarkdownView
+                      selectedNoteId={selectedNote.id}
                       initialMarkdown={selectedNote.content}
                     />
                   </View>

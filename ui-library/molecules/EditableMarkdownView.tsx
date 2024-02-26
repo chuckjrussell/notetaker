@@ -1,15 +1,25 @@
 import {TextInput, Typography} from '@ui-library';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
 export const EditableMarkdownView = ({
   initialMarkdown,
+  selectedNoteId,
 }: {
   initialMarkdown: string;
+  selectedNoteId?: string;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [markdown, setMarkdown] = useState(initialMarkdown);
+  const [currentNoteId, setCurrentNoteId] = useState(selectedNoteId);
+
+  useEffect(() => {
+    if (selectedNoteId !== currentNoteId) {
+      setMarkdown(initialMarkdown);
+      setCurrentNoteId(selectedNoteId);
+    }
+  }, [selectedNoteId]);
 
   return isEditing ? (
     <TextInput

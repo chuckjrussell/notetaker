@@ -5,6 +5,7 @@ import {appConfig} from '../config';
 import {useUserProvider} from './firebase/UserProvider';
 import {RootStackParamList} from './NavigationTypes';
 import {DemoScreen} from './Screens/DemoScreen';
+import {Typography} from '@ui-library/atoms';
 
 const linking: LinkingOptions<RootStackParamList> = {
   prefixes: [appConfig.deeplinkPrefix],
@@ -31,7 +32,9 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const MainStack = () => {
   const {loggedInUser, initialized} = useUserProvider();
+
   if (!initialized) return null;
+
   return (
     <Stack.Navigator
       screenOptions={{

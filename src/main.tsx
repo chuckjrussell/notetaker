@@ -53,8 +53,4 @@ if (style.styleSheet) {
 // Inject stylesheet
 document.head.appendChild(style);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);

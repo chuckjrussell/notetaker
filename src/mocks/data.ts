@@ -1,43 +1,43 @@
 export const notes: {
-  id: number;
+  id: string;
   title: string;
   content: string;
   category: string;
 }[] = [
   {
-    id: 1,
+    id: '1',
     title: 'Qelline Alderleaf',
     content: 'Notes for Quelline go here.',
     category: 'Character',
   },
   {
-    id: 2,
+    id: '2',
     title: 'Sildar Halwinter',
-    content: '',
+    content: 'Notes for Sildar',
     category: 'Character',
   },
   {
-    id: 3,
+    id: '3',
     title: 'Daran Edermath',
-    content: '',
+    content: 'Notes for Daran',
     category: 'Character',
   },
   {
-    id: 4,
+    id: '4',
     title: 'Lightbringer',
-    content: '',
+    content: 'Notes for Lightbringer',
     category: 'Item',
   },
   {
-    id: 5,
+    id: '5',
     title: 'Gundren Rockseeker',
-    content: '',
+    content: 'Notes for Rockseeker',
     category: 'Character',
   },
   {
-    id: 6,
+    id: '6',
     title: 'Wave Echo Cave',
-    content: '',
+    content: 'Notes for Wave Echo Cave',
     category: 'Location',
   },
 ];
