@@ -2,14 +2,14 @@ import {StyleProp, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import type {PropsWithChildren} from 'react';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 
-type TypographyVariant =
+export type TypographyVariant =
   | 'heading1'
   | 'heading2'
   | 'heading3'
   | 'heading4'
   | 'paragraph';
 
-type TypographyProps = PropsWithChildren<{
+export type TypographyProps = PropsWithChildren<{
   style?: StyleProp<TextStyle>;
   variant: TypographyVariant;
 }>;

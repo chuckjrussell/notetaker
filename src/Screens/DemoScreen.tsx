@@ -10,8 +10,6 @@ interface DemoScreenProps {
 }
 
 export const DemoScreen = ({navigation, route}: DemoScreenProps) => {
-  console.log(JSON.stringify(route.params));
-  console.log(JSON.stringify(navigation.getState(), null, 2));
   return (
     <View style={{backgroundColor: 'black'}}>
       <Typography variant="heading1">DemoScreen</Typography>

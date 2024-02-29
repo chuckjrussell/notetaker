@@ -1797,6 +1797,8 @@ PODS:
     - React-jsi (= 0.73.1)
     - React-logger (= 0.73.1)
     - React-perflogger (= 0.73.1)
+  - RNCAsyncStorage (1.22.3):
+    - React-Core
   - RNFBApp (18.9.0):
     - Firebase/CoreOnly (= 10.20.0)
     - React-Core
@@ -1870,6 +1872,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBFirestore (from `../node_modules/@react-native-firebase/firestore`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -1997,6 +2000,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBFirestore:
@@ -2077,6 +2082,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 83d1cc129804991a02f378f5d7094467d0aed15e
   React-utils: fefa27e6d4a5b733f5e76cf8802ccf023ff8cc94
   ReactCommon: 73242ec9768e71688f35ad97ae3d0709a0f66435
+  RNCAsyncStorage: 10591b9e0a91eaffee14e69b3721009759235125
   RNFBApp: 9b25191f7a5e72c185b7e43fffb0d906869c4659
   RNFBFirestore: be3b76650231721bad4e9b28bf3a09a3ce62f8bb
   RNGestureHandler: 7feb85c5a30ebbcd4d5c7a851ba9e7eafb9860cb

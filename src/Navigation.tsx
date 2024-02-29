@@ -12,7 +12,7 @@ const linking: LinkingOptions<RootStackParamList> = {
   config: {
     initialRouteName: 'Demo',
     screens: {
-      Home: 'Home',
+      Notes: 'Notes',
       Demo: 'Demo',
       Signin: 'Signin',
       Signup: 'Signup',
@@ -32,7 +32,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const MainStack = () => {
   const {loggedInUser, initialized} = useUserProvider();
-
+  console.log(JSON.stringify(loggedInUser));
+  console.log(initialized);
   if (!initialized) return null;
 
   return (
@@ -42,7 +43,7 @@ const MainStack = () => {
       }}>
       {loggedInUser ? (
         <>
-          <Stack.Screen name="Home" component={NotesScreen} />
+          <Stack.Screen name="Notes" component={NotesScreen} />
           <Stack.Screen name="Demo" component={DemoScreen} />
         </>
       ) : (

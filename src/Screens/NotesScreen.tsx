@@ -8,15 +8,18 @@ import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ScreenHeaderFilters} from '@ui-library/organisms/ScreenHeaderFilter';
 import {EditableMarkdownView} from '@ui-library/molecules';
-import {initialNote, notes} from '../mocks/data';
+import {initialNote} from '../mocks/data';
 import {useEffect, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {Icon} from '@ui-library/atoms/Icon';
 import firestore from '../firebase/firestore';
+import {useUserProvider} from '../firebase/UserProvider';
+import {NoteModel} from '../firebase/firestoreTypes';
+import {EditableTextField} from '@ui-library/molecules/EditableTextField';
 
 interface NotesScreenProps {
-  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
-  route: RouteProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Notes'>;
+  route: RouteProp<RootStackParamList, 'Notes'>;
 }
 
 export const HorizontalRule = () => {
@@ -28,13 +31,32 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
   const styles = themedStyles();
   const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
+  const [allNotes, setAllNotes] = useState<NoteModel[]>([]);
+  const {userData} = useUserProvider();
 
-  firestore
-    .getUsers()
-    .then(data => console.log(`users data: ${JSON.stringify(data)}`));
+  const {noteId: selectedNoteId, campaignId: selectedCampaignId} =
+    route.params || {}; //sad that I need to do this :(
 
-  const {noteId: selectedNoteId} = route.params || {noteId: undefined}; //sad that I need to do this :(
-  const allNotes = notes;
+  ///THIS IS JUST DEMO WHILE I DON'T HAVE A CAMPAIGN SELECTION SCREEN
+  useEffect(() => {
+    if (userData) {
+      firestore.getCampaigns(userData.id).then(data => {
+        if (data.length > 0) {
+          navigation.setParams({campaignId: data[0].id});
+        }
+      });
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (!selectedCampaignId) return;
+    const unsub = firestore.getNotesSubscription(selectedCampaignId, notes => {
+      setAllNotes(notes);
+      console.log('Update to notes ', JSON.stringify(notes, null, 2));
+    });
+    return unsub;
+  }, [selectedCampaignId]);
+
   const selectedNote = allNotes.find(n => n.id === selectedNoteId) || undefined;
 
   const showNotesPanel =
@@ -85,11 +107,30 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
                     {note.item.title}
                   </Typography>
                   <Typography style={{marginRight: 20}} variant="paragraph">
-                    {note.item.category}
+                    {note.item.type}
                   </Typography>
                 </TouchableOpacity>
               )}
               ItemSeparatorComponent={HorizontalRule}
+            />
+            {/* TODO: Delete this when the note creation is finished */}
+            <Button
+              text="Add Demo Note"
+              variant="primary"
+              style={{
+                marginBottom: 20,
+                alignSelf: 'center',
+              }}
+              onPress={() => {
+                //Add a demo note to the database.
+                if (selectedCampaignId) {
+                  firestore.createNote(selectedCampaignId, {
+                    title: 'New Note',
+                    type: 'Note',
+                    snippet: '',
+                  });
+                }
+              }}
             />
           </View>
         )}
@@ -99,18 +140,25 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
         {showNotesPanel && (
           <View style={[styles.panel, styles.contentPanel]}>
             <View style={{flexGrow: 1}}>
-              {selectedNote ? (
+              {selectedNote && selectedCampaignId ? (
                 <>
-                  <Typography
+                  <EditableTextField
                     style={{paddingHorizontal: 20, marginBottom: 20}}
-                    variant="heading2">
-                    {selectedNote.title}
-                  </Typography>
+                    variant="heading2"
+                    initialText={selectedNote.title || '(untitled)'}
+                    onTextChanged={newText => {
+                      firestore.updateNote(selectedCampaignId, {
+                        ...selectedNote,
+                        title: newText,
+                      });
+                    }}
+                  />
                   <View style={{margin: 20}}>
-                    <EditableMarkdownView
+                    {/* REPLACE THIS WITH SOMETHING THAT MAKES ITS OWN CALL TO FIRESTORE */}
+                    {/* <EditableMarkdownView
                       selectedNoteId={selectedNote.id}
                       initialMarkdown={selectedNote.content}
-                    />
+                    /> */}
                   </View>
                 </>
               ) : (

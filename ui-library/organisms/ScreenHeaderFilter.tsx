@@ -3,6 +3,7 @@ import {View} from 'react-native';
 import {Button, TextInput} from '..';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {DEVICE_SIZES, useSizeRender} from 'rn-responsive-styles';
+import {useUserProvider} from '../../src/firebase/UserProvider';
 
 interface ScreenHeaderFiltersProps {
   tags?: string[];
@@ -20,6 +21,7 @@ export const ScreenHeaderFilters = ({
 }: ScreenHeaderFiltersProps) => {
   const styles = useThemeStyles();
   const {isLargerThan} = useSizeRender();
+  const {userData} = useUserProvider();
 
   return (
     <View style={styles.container}>
@@ -48,7 +50,7 @@ export const ScreenHeaderFilters = ({
         )}
 
         <Button
-          text="Logout"
+          text={`Logout, ${userData?.firstName}`}
           onPress={() => {
             onSignout && onSignout();
           }}
@@ -62,7 +64,7 @@ const useThemeStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
     container: {
       flexDirection: 'row',
-      margin: theme.panel.margin,
+      marginVertical: theme.panel.marginVertical,
       width: '100%',
     },
     searchBar: {

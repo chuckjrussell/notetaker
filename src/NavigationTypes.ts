@@ -2,5 +2,5 @@ export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
   Demo: undefined;
-  Home: {noteId: string} | undefined;
+  Notes: {noteId: string; campaignId: string} | undefined;
 };
