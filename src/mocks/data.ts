@@ -10,7 +10,7 @@ export const initialNote = `
 2) Finish implementing the small device menu
 
 ## Systems
-1) Add a firebase for native implementation (auth)
+1) (DONE) Add a firebase for native implementation (auth)
 2) (DONE) Begin looking at firebase db integration
 3) (DONE ISH) Fix SVGs for native, resolve remaining web -> native descrepancies (ie styles that don't align)
 

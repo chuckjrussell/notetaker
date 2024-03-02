@@ -16,6 +16,7 @@ import firestore from '../firebase/firestore';
 import {useUserProvider} from '../firebase/UserProvider';
 import {NoteModel} from '../firebase/firestoreTypes';
 import {EditableTextField} from '@ui-library/molecules/EditableTextField';
+import {Drawer} from 'react-native-drawer-layout';
 
 interface NotesScreenProps {
   navigation: StackNavigationProp<RootStackParamList, 'Notes'>;
@@ -32,6 +33,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
   const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [allNotes, setAllNotes] = useState<NoteModel[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {userData} = useUserProvider();
 
   const {noteId: selectedNoteId, campaignId: selectedCampaignId} =
@@ -75,7 +77,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
         }}
       />
       <View style={styles.pageWrapper}>
-        {isLargerThan(DEVICE_SIZES.MD) && (
+        {isLargerThan(DEVICE_SIZES.MD) ? (
           <View style={[styles.panel]}>
             <Typography
               style={{paddingHorizontal: 20, marginBottom: 20}}
@@ -88,10 +90,6 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               renderItem={note => (
                 <TouchableOpacity
                   onPress={() => {
-                    console.log(`navigation to: noteId: ${note.item.id}`);
-                    // navigation.push('Notes', {
-                    //   noteId: note.item.id,
-                    // });
                     navigation.setParams({
                       noteId: note.item.id,
                     });
@@ -124,16 +122,35 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               onPress={() => {
                 //Add a demo note to the database.
                 if (selectedCampaignId) {
-                  firestore.createNote(selectedCampaignId, {
-                    title: 'New Note',
-                    type: 'Note',
-                    snippet: '',
-                  });
+                  firestore
+                    .createNote(selectedCampaignId, {
+                      title: 'New Note',
+                      type: 'Note',
+                      snippet: '',
+                    })
+                    .then(newNote => {
+                      navigation.setParams({
+                        noteId: newNote.id,
+                      });
+                    });
                 }
               }}
             />
           </View>
-        )}
+        ) : null
+        // <Drawer
+        //   open={isMenuOpen}
+        //   onOpen={() => setIsMenuOpen(true)}
+        //   onClose={() => setIsMenuOpen(false)}
+        //   renderDrawerContent={() => {
+        //     return (
+        //       <Typography variant="paragraph">Drawer content</Typography>
+        //     );
+        //   }}>
+        //   <Typography variant="heading1">Drawer content</Typography>
+        //   <Button onPress={() => setIsMenuOpen(prevOpen => !prevOpen)} />
+        // </Drawer>
+        }
         {/* Active Notes Panel: Should NOT render if there is no content (no selected id) 
           Also should not render if its in two panel layout and not active
         */}

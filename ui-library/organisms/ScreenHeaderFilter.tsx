@@ -18,6 +18,7 @@ export const ScreenHeaderFilters = ({
   onTagsChanged,
   onTextSearchChanged,
   onSignout,
+  onMenuPressed,
 }: ScreenHeaderFiltersProps) => {
   const styles = useThemeStyles();
   const {isLargerThan} = useSizeRender();
@@ -44,7 +45,7 @@ export const ScreenHeaderFilters = ({
           <Button
             text="Menu"
             onPress={() => {
-              onSignout && onSignout();
+              onMenuPressed && onMenuPressed();
             }}
           />
         )}

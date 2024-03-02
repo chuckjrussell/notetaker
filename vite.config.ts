@@ -6,6 +6,8 @@ import svgr from 'vite-plugin-svgr';
 export default defineConfig({
   define: {
     global: 'window',
+    'process.env': {},
+    __DEV__: 'true',
   },
   optimizeDeps: {
     esbuildOptions: {
