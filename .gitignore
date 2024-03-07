@@ -65,8 +65,3 @@ yarn-error.log
 # testing
 /coverage
 
-# firebase
-/ios/GoogleService-Info.plist
-/src/firebase/firebase.config.ts 
-/src/firebase/firebase.config.native.ts
-/android/app/google-services.json

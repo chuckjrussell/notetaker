@@ -1,4 +1,4 @@
-import {defineConfig} from 'vite';
+import {defineConfig, transformWithEsbuild} from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import svgr from 'vite-plugin-svgr';
@@ -13,6 +13,9 @@ export default defineConfig({
     esbuildOptions: {
       mainFields: ['module', 'main'],
       resolveExtensions: ['.web.js', '.js', '.ts'],
+      loader: {
+        '.js': 'jsx',
+      },
     },
   },
   resolve: {
@@ -23,7 +26,23 @@ export default defineConfig({
       '@ui-library': path.resolve(__dirname, './ui-library'),
     },
   },
-  plugins: [svgr(), react()],
+  plugins: [
+    {
+      name: 'treat-js-files-as-jsx',
+      async transform(code, id) {
+        if (!id.match(/src\/.*\.js$/)) return null; // include ts or tsx for TypeScript support
+
+        // Use the exposed transform from vite, instead of directly
+        // transforming with esbuild
+        return transformWithEsbuild(code, id, {
+          loader: 'jsx',
+          jsx: 'automatic',
+        });
+      },
+    },
+    svgr(),
+    react(),
+  ],
   build: {
     commonjsOptions: {
       transformMixedEsModules: true,
