@@ -17,6 +17,8 @@ import {
   IFirestore,
   CampaignModel,
   NoteModel,
+  NoteContentsModel,
+  SubscriptionCallback,
 } from './firestoreTypes';
 
 // Initialize Firebase
@@ -54,7 +56,7 @@ class FirestoreDB implements IFirestore {
 
   getNotesSubscription(
     campaignId: string,
-    callback: (notes: NoteModel[]) => void,
+    callback: SubscriptionCallback<NoteModel[]>,
   ): Unsubscribe {
     const unsub = onSnapshot(
       collection(db, 'Campaigns', campaignId, 'notes'),
@@ -79,6 +81,26 @@ class FirestoreDB implements IFirestore {
 
   updateNote(campaignId: string, note: NoteModel) {
     return setDoc(doc(db, 'Campaigns', campaignId, 'notes', note.id), note);
+  }
+
+  getNoteContentSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteContentsModel>,
+  ) {
+    return new Promise<NoteContentsModel>(async resolve => {
+      const notesCollection = collection(
+        db,
+        'Campaign',
+        campaignId,
+        'notes',
+        noteId,
+        'noteContents',
+      );
+      const querySnapshot = await getDocs(notesCollection);
+      if (querySnapshot.size > 0) [resolve({...querySnapshot.docs[0].data})];
+      resolve({contents: undefined});
+    });
   }
 }
 

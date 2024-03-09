@@ -1,3 +1,9 @@
+export const Schema = {
+  campagin: 'Campaigns',
+  notes: 'notes',
+  users: 'Users',
+};
+
 export type UserModel = {
   firstName?: string;
   lastName?: string;
@@ -25,6 +31,12 @@ export type NoteModel = {
   icon?: string;
 };
 
+export type NoteContentsModel = {
+  contents?: string;
+};
+
+export type SubscriptionCallback<T> = (data: T) => void;
+
 type Unsubscribe = () => void;
 
 export interface IFirestore {
@@ -33,7 +45,7 @@ export interface IFirestore {
   getCampaigns(userId: string): Promise<CampaignModel[]>;
   getNotesSubscription(
     campaignId: string,
-    callback: (notes: NoteModel[]) => void,
+    callback: SubscriptionCallback<NoteModel[]>,
   ): Unsubscribe;
   createNote(campaignId: string, note: NoteModel): Promise<NoteModel>;
   updateNote(campaignId: string, note: NoteModel): Promise<any>;

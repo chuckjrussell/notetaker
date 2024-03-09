@@ -4,6 +4,7 @@ import {
   IFirestore,
   CampaignModel,
   NoteModel,
+  SubscriptionCallback,
 } from './firestoreTypes';
 
 class FirestoreDB implements IFirestore {
@@ -54,7 +55,7 @@ class FirestoreDB implements IFirestore {
   }
   getNotesSubscription(
     campaignId: string,
-    callback: (notes: NoteModel[]) => void,
+    callback: SubscriptionCallback<NoteModel[]>,
   ) {
     const unsub = firestore()
       .collection(`Campaigns/${campaignId}/notes`)

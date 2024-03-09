@@ -17,6 +17,9 @@ import {useUserProvider} from '../firebase/UserProvider';
 import {NoteModel} from '../firebase/firestoreTypes';
 import {EditableTextField} from '@ui-library/molecules/EditableTextField';
 import {Drawer} from 'react-native-drawer-layout';
+import {ActiveNotePanel} from './Notes/ActiveNotesPanel';
+import {PanelFooterButton} from './Notes/PanelFooterButton';
+import {Panel} from './Notes/Panel';
 
 interface NotesScreenProps {
   navigation: StackNavigationProp<RootStackParamList, 'Notes'>;
@@ -78,7 +81,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
       />
       <View style={styles.pageWrapper}>
         {isLargerThan(DEVICE_SIZES.MD) ? (
-          <View style={[styles.panel]}>
+          <Panel>
             <Typography
               style={{paddingHorizontal: 20, marginBottom: 20}}
               variant="heading2">
@@ -112,13 +115,8 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               ItemSeparatorComponent={HorizontalRule}
             />
             {/* TODO: Delete this when the note creation is finished */}
-            <Button
+            <PanelFooterButton
               text="Add Demo Note"
-              variant="primary"
-              style={{
-                marginBottom: 20,
-                alignSelf: 'center',
-              }}
               onPress={() => {
                 //Add a demo note to the database.
                 if (selectedCampaignId) {
@@ -136,71 +134,23 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
                 }
               }}
             />
-          </View>
-        ) : null
-        // <Drawer
-        //   open={isMenuOpen}
-        //   onOpen={() => setIsMenuOpen(true)}
-        //   onClose={() => setIsMenuOpen(false)}
-        //   renderDrawerContent={() => {
-        //     return (
-        //       <Typography variant="paragraph">Drawer content</Typography>
-        //     );
-        //   }}>
-        //   <Typography variant="heading1">Drawer content</Typography>
-        //   <Button onPress={() => setIsMenuOpen(prevOpen => !prevOpen)} />
-        // </Drawer>
-        }
+          </Panel>
+        ) : null}
         {/* Active Notes Panel: Should NOT render if there is no content (no selected id) 
           Also should not render if its in two panel layout and not active
         */}
         {showNotesPanel && (
-          <View style={[styles.panel, styles.contentPanel]}>
-            <View style={{flexGrow: 1}}>
-              {selectedNote && selectedCampaignId ? (
-                <>
-                  <EditableTextField
-                    style={{paddingHorizontal: 20, marginBottom: 20}}
-                    variant="heading2"
-                    initialText={selectedNote.title || '(untitled)'}
-                    onTextChanged={newText => {
-                      firestore.updateNote(selectedCampaignId, {
-                        ...selectedNote,
-                        title: newText,
-                      });
-                    }}
-                  />
-                  <View style={{margin: 20}}>
-                    {/* REPLACE THIS WITH SOMETHING THAT MAKES ITS OWN CALL TO FIRESTORE */}
-                    {/* <EditableMarkdownView
-                      selectedNoteId={selectedNote.id}
-                      initialMarkdown={selectedNote.content}
-                    /> */}
-                  </View>
-                </>
-              ) : (
-                // <></>
-                <Icon iconType="spellBook" style={styles.noNoteSelectedIcon} />
-              )}
-            </View>
-            {isSmallerThan(DEVICE_SIZES.XL) && (
-              <Button
-                onPress={() => setIsSessionActive(true)}
-                style={{
-                  marginBottom: 20,
-                  alignSelf: 'center',
-                }}
-                variant="primary"
-                text="Switch to session"
-              />
-            )}
-          </View>
+          <ActiveNotePanel
+            note={selectedNote}
+            campaignId={selectedCampaignId}
+            onSessionPress={() => setIsSessionActive(true)}
+          />
         )}
 
         {/* Session Notes Panel */}
 
         {showSessionPanel && (
-          <View style={[styles.panel, styles.contentPanel]}>
+          <Panel isContent>
             <View style={{flexGrow: 1}}>
               <Typography
                 style={{paddingHorizontal: 20, marginBottom: 20}}
@@ -212,17 +162,12 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               </View>
             </View>
             {isSmallerThan(DEVICE_SIZES.XL) && (
-              <Button
+              <PanelFooterButton
+                text="Switch to Note"
                 onPress={() => setIsSessionActive(false)}
-                style={{
-                  marginBottom: 20,
-                  alignSelf: 'center',
-                }}
-                variant="primary"
-                text="Switch to note"
               />
             )}
-          </View>
+          </Panel>
         )}
       </View>
     </ScreenWrapper>
@@ -236,14 +181,6 @@ const themedStyles = CreateThemedStyle(theme => ({
       gap: theme.panel.gap,
       flexGrow: 1,
     },
-    panel: {
-      backgroundColor: theme.palette.gray.medium,
-      borderRadius: theme.borders.radius,
-      width: '100%',
-      paddingVertical: 20,
-      marginVertical: theme.panel.marginVertical,
-    },
-    contentPanel: {},
     noteList: {
       flexWrap: 'wrap',
       gap: 16,
@@ -271,20 +208,11 @@ const themedStyles = CreateThemedStyle(theme => ({
   },
   overrideStyles: {
     [minSize(DEVICE_SIZES.LG)]: {
-      panel: {
-        width: '32%',
-      },
       note: {
         width: '100%',
       },
     },
     [DEVICE_SIZES.LG]: {
-      panel: {
-        width: '32%',
-      },
-      contentPanel: {
-        width: '64%',
-      },
       note: {
         width: '100%',
       },
