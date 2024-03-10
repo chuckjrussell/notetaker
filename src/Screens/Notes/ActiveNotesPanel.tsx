@@ -1,15 +1,17 @@
 import {Icon} from '@ui-library/atoms/Icon';
 import {EditableTextField} from '@ui-library/molecules/EditableTextField';
 import firestore from '../../firebase/firestore';
-import {NoteModel} from '../../firebase/firestoreTypes';
+import {NoteContentsModel, NoteModel} from '../../firebase/firestoreTypes';
 import {View} from 'react-native';
 import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
 import {PanelFooterButton} from './PanelFooterButton';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {Panel} from './Panel';
+import {useEffect, useState} from 'react';
+import {EditableMarkdownView} from '@ui-library/molecules';
 
 type ActiveNotePanelProps = {
-  note?: NoteModel;
+  noteId?: string;
   campaignId?: string;
   onSessionPress: () => void;
 };
@@ -17,16 +19,42 @@ type ActiveNotePanelProps = {
 //TODO: Add Firebase Integration here for currently selected note details
 
 export const ActiveNotePanel = ({
-  note,
+  noteId,
   campaignId,
   onSessionPress,
 }: ActiveNotePanelProps) => {
+  const [note, setNote] = useState<NoteModel>();
+  const [noteContents, setNoteContents] = useState<NoteContentsModel>();
+  useEffect(() => {
+    if (!campaignId || !noteId) {
+      return;
+    }
+    return firestore.getNoteSubscription(campaignId, noteId, updatedNote => {
+      setNote(updatedNote);
+    });
+  }, [campaignId, noteId, setNote]);
+
+  useEffect(() => {
+    if (!campaignId || !noteId) {
+      console.log('no campaign id or note id set');
+      return;
+    }
+    return firestore.getNoteContentSubscription(
+      campaignId,
+      noteId,
+      noteContents => {
+        console.log('Setting note contents from firestore', noteContents);
+        setNoteContents(noteContents);
+      },
+    );
+  }, [campaignId, noteId, setNoteContents]);
+
   const styles = themedStyles();
   const {isSmallerThan} = useSizeRender();
   return (
     <Panel isContent>
       <View style={{flexGrow: 1}}>
-        {note && campaignId ? (
+        {note && campaignId && noteId ? (
           <>
             <EditableTextField
               style={{paddingHorizontal: 20, marginBottom: 20}}
@@ -40,11 +68,21 @@ export const ActiveNotePanel = ({
               }}
             />
             <View style={{margin: 20}}>
-              {/* REPLACE THIS WITH SOMETHING THAT MAKES ITS OWN CALL TO FIRESTORE */}
-              {/* <EditableMarkdownView
-                      selectedNoteId={selectedNote.id}
-                      initialMarkdown={selectedNote.content}
-                    /> */}
+              <EditableMarkdownView
+                contents={noteContents?.contents}
+                onContentsChanged={newText => {
+                  if (noteContents) {
+                    firestore.updateNoteContent(campaignId, noteId, {
+                      ...noteContents,
+                      contents: newText,
+                    });
+                  } else {
+                    firestore.createNoteContent(campaignId, noteId, {
+                      contents: newText,
+                    });
+                  }
+                }}
+              />
             </View>
           </>
         ) : (

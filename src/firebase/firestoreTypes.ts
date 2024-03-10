@@ -1,6 +1,7 @@
 export const Schema = {
-  campagin: 'Campaigns',
+  campaign: 'Campaigns',
   notes: 'notes',
+  noteContents: 'noteContents',
   users: 'Users',
 };
 
@@ -32,6 +33,7 @@ export type NoteModel = {
 };
 
 export type NoteContentsModel = {
+  id: string;
   contents?: string;
 };
 
@@ -49,4 +51,19 @@ export interface IFirestore {
   ): Unsubscribe;
   createNote(campaignId: string, note: NoteModel): Promise<NoteModel>;
   updateNote(campaignId: string, note: NoteModel): Promise<any>;
+  createNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: Omit<NoteContentsModel, 'id'>,
+  ): Promise<NoteContentsModel>;
+  updateNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: NoteContentsModel,
+  ): Promise<any>;
+  getNoteContentSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteContentsModel | undefined>,
+  ): Unsubscribe;
 }
