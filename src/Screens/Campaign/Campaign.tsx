@@ -71,9 +71,10 @@ const themedStyles = CreateThemedStyle(theme => ({
         width: '49%',
       },
     },
-    [DEVICE_SIZES.SM]: {
+    [maxSize(DEVICE_SIZES.SM)]: {
       card: {
         width: '99%',
+        height: 'auto',
       },
     },
   },
