@@ -18,7 +18,7 @@ interface DemoScreenProps {
 export const CampaignScreen = ({navigation, route}: DemoScreenProps) => {
   const {userData} = useUserProvider();
   const [campaigns, setCampaigns] = useState<CampaignModel[]>([]);
-  const style = themedStyles();
+  const styles = themedStyles();
 
   useEffect(() => {
     if (userData?.id) {
@@ -34,9 +34,9 @@ export const CampaignScreen = ({navigation, route}: DemoScreenProps) => {
       {!userData ? (
         <Typography variant="paragraph">No user loaded</Typography>
       ) : (
-        <View style={style.cardContainer}>
+        <View style={styles.cardContainer}>
           {campaigns.map(c => (
-            <Card key={c.id} style={style.card}>
+            <Card key={c.id} style={styles.card}>
               <Typography variant="heading4">{c.name}</Typography>
               <Typography variant="heading4">{c.id}</Typography>
               <Button
@@ -66,8 +66,15 @@ const themedStyles = CreateThemedStyle(theme => ({
     },
   },
   overrideStyles: {
-    [maxSize(DEVICE_SIZES.MD)]: {
-      card: {},
+    [DEVICE_SIZES.MD]: {
+      card: {
+        width: '49%',
+      },
+    },
+    [DEVICE_SIZES.SM]: {
+      card: {
+        width: '99%',
+      },
     },
   },
 }));
