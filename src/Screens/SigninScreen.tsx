@@ -8,7 +8,7 @@ import {
   SimpleFormLayout,
 } from '../../ui-library';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../NavigationTypes';
+import {RootStackParamList} from '../Navigation/NavigationTypes';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
 import {getErrorMessageFromCode} from '../firebase/authErrorCodes';

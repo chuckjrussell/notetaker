@@ -1,5 +1,5 @@
 import {TextInput, Typography} from '@ui-library';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Touchable, TouchableOpacity} from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
@@ -13,11 +13,16 @@ export const EditableMarkdownView = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editingContent, setEditingContent] = useState(contents);
 
+  const enableEditing = () => {
+    setIsEditing(true);
+    setEditingContent(contents);
+  };
+
   if (isEditing) {
     return (
       <TextInput
         multiline
-        numberOfLines={16}
+        autofill
         onChangeText={newText => setEditingContent(newText)}
         value={editingContent}
         onBlur={() => {
@@ -37,8 +42,7 @@ export const EditableMarkdownView = ({
   ) : (
     <TouchableOpacity
       onPress={() => {
-        setIsEditing(true);
-        setEditingContent(contents);
+        enableEditing();
       }}>
       <Markdown
         style={{

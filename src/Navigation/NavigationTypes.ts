@@ -1,6 +1,7 @@
 export type RootStackParamList = {
   Signin: undefined;
   Signup: undefined;
-  Demo: undefined;
+  Campaign: undefined;
+  CampaignHome: {campaignId: string};
   Notes: {noteId: string; campaignId: string} | undefined;
 };
