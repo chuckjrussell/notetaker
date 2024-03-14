@@ -4,6 +4,9 @@ import {
   IFirestore,
   CampaignModel,
   NoteModel,
+  SubscriptionCallback,
+  Schema,
+  NoteContentsModel,
 } from './firestoreTypes';
 
 class FirestoreDB implements IFirestore {
@@ -52,9 +55,35 @@ class FirestoreDB implements IFirestore {
         });
     });
   }
+
+  getCampaignsSubscription(
+    userId: string,
+    callback: SubscriptionCallback<CampaignModel[]>,
+  ) {
+    const unsub = firestore()
+      .collection('Campaigns')
+      .where('createdBy.userId', '==', userId)
+      .onSnapshot(querySnapshot => {
+        const campaigns: CampaignModel[] = [];
+        querySnapshot.forEach(doc => {
+          campaigns.push({id: doc.id, ...doc.data()});
+        });
+        callback(campaigns);
+      });
+    return unsub;
+  }
+
+  createCampaign(campaign: Omit<CampaignModel, 'id'>) {
+    return new Promise<CampaignModel>(resolve => {
+      firestore()
+        .collection(`${Schema.campaign}`)
+        .add(campaign)
+        .then(data => resolve({...campaign, id: data.id}));
+    });
+  }
   getNotesSubscription(
     campaignId: string,
-    callback: (notes: NoteModel[]) => void,
+    callback: SubscriptionCallback<NoteModel[]>,
   ) {
     const unsub = firestore()
       .collection(`Campaigns/${campaignId}/notes`)
@@ -71,7 +100,7 @@ class FirestoreDB implements IFirestore {
   createNote(campaignId: string, note: NoteModel) {
     return new Promise<NoteModel>(resolve => {
       firestore()
-        .collection(`Campaign/${campaignId}/notes`)
+        .collection(`${Schema.campaign}/${campaignId}/${Schema.notes}`)
         .add(note)
         .then(data => resolve({...note, id: data.id}));
     });
@@ -82,6 +111,49 @@ class FirestoreDB implements IFirestore {
       .collection(`Campaign/${campaignId}/notes`)
       .doc(note.id)
       .update(note);
+  }
+
+  /**********************************
+   * NOTE CONTENTS
+   **********************************/
+  createNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: Omit<NoteContentsModel, 'id'>,
+  ) {
+    return new Promise<NoteContentsModel>(resolve => {
+      firestore()
+        .collection(
+          `${Schema.campaign}/${campaignId}/${Schema.notes}/${noteId}`,
+        )
+        .add(noteContents)
+        .then(data => resolve({...noteContents, id: data.id}));
+    });
+  }
+
+  updateNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: NoteContentsModel,
+  ) {
+    return firestore()
+      .collection(`${Schema.campaign}/${campaignId}/${Schema.notes}/${noteId}`)
+      .doc(noteContents.id)
+      .update(noteContents);
+  }
+
+  getNoteContentSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteContentsModel | undefined>,
+  ) {
+    const unsub = firestore()
+      .collection(`Campaigns/${campaignId}/notes`)
+      .doc(noteId)
+      .onSnapshot(querySnapshot => {
+        callback({id: querySnapshot.id, ...querySnapshot.data});
+      });
+    return unsub;
   }
 }
 

@@ -3,7 +3,7 @@ import {View} from 'react-native';
 import {Button, TextInput} from '..';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {DEVICE_SIZES, useSizeRender} from 'rn-responsive-styles';
-import {useUserProvider} from '../../src/firebase/UserProvider';
+import {useUserProvider} from '../../src/context/UserProvider';
 
 interface ScreenHeaderFiltersProps {
   tags?: string[];

@@ -17,6 +17,9 @@ import {
   IFirestore,
   CampaignModel,
   NoteModel,
+  NoteContentsModel,
+  SubscriptionCallback,
+  Schema,
 } from './firestoreTypes';
 
 // Initialize Firebase
@@ -25,7 +28,7 @@ const db = getFirestore(app);
 class FirestoreDB implements IFirestore {
   getUser(userId: string): Promise<UserModel> {
     return new Promise<UserModel>(async resolve => {
-      const q = doc(db, 'Users', userId);
+      const q = doc(db, Schema.users, userId);
       const querySnapshot = await getDoc(q);
       resolve({
         id: querySnapshot.id,
@@ -36,7 +39,7 @@ class FirestoreDB implements IFirestore {
 
   getUsers() {
     return new Promise<UserModel[]>(async (resolve, reject) => {
-      const querySnapshot = await getDocs(collection(db, 'Users'));
+      const querySnapshot = await getDocs(collection(db, Schema.users));
       resolve(querySnapshot.docs.map(doc => ({id: doc.id, ...doc.data()})));
     });
   }
@@ -52,9 +55,37 @@ class FirestoreDB implements IFirestore {
     });
   }
 
+  getCampaignsSubscription(
+    userId: string,
+    callback: SubscriptionCallback<CampaignModel[]>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      query(
+        collection(db, 'Campaigns'),
+        where('createdBy.userId', '==', userId),
+      ),
+      querySnapshot => {
+        const campaigns: CampaignModel[] = [];
+        querySnapshot.forEach(doc => {
+          campaigns.push({id: doc.id, ...doc.data()});
+        });
+        callback(campaigns);
+      },
+    );
+    return unsub;
+  }
+
+  createCampaign(campaign: Omit<CampaignModel, 'id'>) {
+    return new Promise<NoteContentsModel>(async resolve => {
+      const campaignCollection = collection(db, Schema.campaign);
+      const retVal = await addDoc(campaignCollection, campaign);
+      resolve({...campaign, id: retVal.id});
+    });
+  }
+
   getNotesSubscription(
     campaignId: string,
-    callback: (notes: NoteModel[]) => void,
+    callback: SubscriptionCallback<NoteModel[]>,
   ): Unsubscribe {
     const unsub = onSnapshot(
       collection(db, 'Campaigns', campaignId, 'notes'),
@@ -79,6 +110,87 @@ class FirestoreDB implements IFirestore {
 
   updateNote(campaignId: string, note: NoteModel) {
     return setDoc(doc(db, 'Campaigns', campaignId, 'notes', note.id), note);
+  }
+
+  getNoteSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteModel | undefined>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      doc(db, 'Campaigns', campaignId, 'notes', noteId),
+      querySnapshot => {
+        callback({id: querySnapshot.id, ...querySnapshot.data()});
+      },
+    );
+    return unsub;
+  }
+
+  /**********************************
+   * NOTE CONTENTS
+   **********************************/
+  createNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: Omit<NoteContentsModel, 'id'>,
+  ) {
+    return new Promise<NoteContentsModel>(async resolve => {
+      const noteContentsCollection = collection(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.notes,
+        noteId,
+        Schema.noteContents,
+      );
+      const retVal = await addDoc(noteContentsCollection, noteContents);
+      resolve({...noteContents, id: retVal.id});
+    });
+  }
+
+  updateNoteContent(
+    campaignId: string,
+    noteId: string,
+    noteContents: NoteContentsModel,
+  ) {
+    return setDoc(
+      doc(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.notes,
+        noteId,
+        Schema.noteContents,
+        noteContents.id,
+      ),
+      noteContents,
+    );
+  }
+
+  getNoteContentSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteContentsModel | undefined>,
+  ) {
+    const unsub = onSnapshot(
+      collection(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.notes,
+        noteId,
+        Schema.noteContents,
+      ),
+      querySnapshot => {
+        if (!querySnapshot.empty) {
+          const noteDoc = querySnapshot.docs[0];
+          callback({id: noteDoc.id, ...noteDoc.data()});
+        } else {
+          callback(undefined);
+        }
+      },
+    );
+    return unsub;
   }
 }
 

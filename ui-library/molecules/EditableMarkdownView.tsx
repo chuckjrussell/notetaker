@@ -1,36 +1,49 @@
 import {TextInput, Typography} from '@ui-library';
-import {useEffect, useState} from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {useEffect, useRef, useState} from 'react';
+import {StyleSheet, Touchable, TouchableOpacity} from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
 export const EditableMarkdownView = ({
-  initialMarkdown,
-  selectedNoteId,
+  contents,
+  onContentsChanged,
 }: {
-  initialMarkdown: string;
-  selectedNoteId?: string;
+  contents?: string;
+  onContentsChanged?: (newContents: string) => void;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [markdown, setMarkdown] = useState(initialMarkdown);
-  const [currentNoteId, setCurrentNoteId] = useState(selectedNoteId);
+  const [editingContent, setEditingContent] = useState(contents);
 
-  useEffect(() => {
-    if (selectedNoteId !== currentNoteId) {
-      setMarkdown(initialMarkdown);
-      setCurrentNoteId(selectedNoteId);
-    }
-  }, [selectedNoteId]);
+  const enableEditing = () => {
+    setIsEditing(true);
+    setEditingContent(contents);
+  };
 
-  return isEditing ? (
-    <TextInput
-      multiline
-      numberOfLines={16}
-      onChangeText={newText => setMarkdown(newText)}
-      value={markdown}
-      onBlur={() => setIsEditing(false)}
-    />
-  ) : (
+  if (isEditing) {
+    return (
+      <TextInput
+        multiline
+        autofill
+        onChangeText={newText => setEditingContent(newText)}
+        value={editingContent}
+        onBlur={() => {
+          setIsEditing(false);
+          onContentsChanged &&
+            editingContent &&
+            onContentsChanged(editingContent);
+        }}
+      />
+    );
+  }
+
+  return isNullOrWhitespace(contents) ? (
     <TouchableOpacity onPress={() => setIsEditing(true)}>
+      <Typography variant="paragraph">Click here to add text...</Typography>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity
+      onPress={() => {
+        enableEditing();
+      }}>
       <Markdown
         style={{
           body: {
@@ -59,8 +72,12 @@ export const EditableMarkdownView = ({
           ),
         }}
         mergeStyle={true}>
-        {markdown}
+        {contents}
       </Markdown>
     </TouchableOpacity>
   );
 };
+
+function isNullOrWhitespace(input?: string) {
+  return !input || !input.trim();
+}

@@ -1,8 +1,8 @@
 import {User, onAuthStateChanged} from 'firebase/auth';
 import {ReactNode, createContext, useContext, useEffect, useState} from 'react';
-import {auth} from './firebase.config';
-import {UserModel} from './firestoreTypes';
-import firestore from './firestore';
+import {auth} from '../firebase/firebase.config';
+import {UserModel} from '../firebase/firestoreTypes';
+import firestore from '../firebase/firestore';
 
 type UserContextType = {
   loggedInUser: User | null;

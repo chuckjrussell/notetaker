@@ -1,6 +1,6 @@
 import {
   TextInput as RNTextInput,
-  TextInputProps as RNInputProps,
+  TextInputProps as RNTextInputProps,
   StyleSheet,
   View,
   StyleProp,
@@ -9,22 +9,35 @@ import {
 import {Typography} from '.';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {useThemeProvider} from '@ui-library/context/ThemeProvider';
+import {forwardRef, useState} from 'react';
 
 type TextInputProps = {
   variant?: 'form-field';
-} & RNInputProps;
+  autofill?: boolean;
+} & React.ComponentProps<typeof RNTextInput>;
 
 export const TextInput = (props: TextInputProps) => {
+  const [height, setHeight] = useState(0);
   const styles = themedStyles();
   const {theme} = useThemeProvider();
-  const {variant, style: styleProps, ...rest} = props;
+  const {variant, autofill, style: styleProps, ...rest} = props;
   const inputStyles: StyleProp<TextStyle> = [styles.inputField];
   if (variant === 'form-field') {
     inputStyles.push(styles.formField);
   }
+
+  if (autofill) {
+    inputStyles.push({
+      height: height,
+    });
+  }
+
   return (
     <RNTextInput
       style={[...inputStyles, props.style]}
+      onContentSizeChange={event =>
+        setHeight(event.nativeEvent.contentSize.height)
+      }
       placeholderTextColor={theme.palette.gray.veryLight}
       {...rest}
     />
