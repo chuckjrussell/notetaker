@@ -1,7 +1,6 @@
 import {defineConfig, transformWithEsbuild} from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {extname} from 'path';
 import svgr from 'vite-plugin-svgr';
 import babel from 'vite-plugin-babel';
 
@@ -9,9 +8,10 @@ export default defineConfig({
   define: {
     global: 'window',
     'process.env': {},
-    __DEV__: 'true',
+    __DEV__: 'false',
   },
   optimizeDeps: {
+    disabled: false,
     esbuildOptions: {
       mainFields: ['module', 'main'],
       resolveExtensions: ['.web.js', '.js', '.ts'],
@@ -60,6 +60,7 @@ export default defineConfig({
   ],
   build: {
     commonjsOptions: {
+      include: [],
       transformMixedEsModules: true,
     },
   },
