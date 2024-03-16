@@ -11,7 +11,7 @@ export const ScreenWrapper = ({children}: {children: React.ReactNode}) => {
 const themedStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
     container: {
-      padding: 32,
+      padding: theme.application.padding,
       backgroundColor: theme.palette.gray.dark,
       flexGrow: 1,
     },

@@ -19,6 +19,7 @@ export const basePalette = {
 export const baseTheme = {
   application: {
     backgroundColor: basePalette.gray.dark,
+    padding: 32,
   },
   panel: {
     backgroundColor: basePalette.gray.medium,

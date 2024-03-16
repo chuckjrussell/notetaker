@@ -1,7 +1,7 @@
 import {NavigationContainer, LinkingOptions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SigninScreen, SignupScreen, NotesScreen} from '../Screens';
-import {appConfig} from '../../config';
+import {appConfig} from '../../config.ts';
 import {useUserProvider} from '../context/UserProvider';
 import {RootStackParamList} from './NavigationTypes';
 import {CampaignScreen} from '../Screens/Campaign/Campaign';

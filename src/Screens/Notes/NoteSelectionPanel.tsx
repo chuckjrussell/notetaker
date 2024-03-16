@@ -64,7 +64,7 @@ export const NoteSelectionPanel = ({
       />
       {/* TODO: Delete this when the note creation is finished */}
       <PanelFooterButton
-        text="Add Demo Note"
+        text="New Note"
         onPress={() => {
           //Add a demo note to the database.
           if (campaignId) {

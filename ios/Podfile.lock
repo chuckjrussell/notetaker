@@ -1811,7 +1811,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNReanimated (3.7.1):
+  - RNReanimated (3.8.0):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -2094,7 +2094,7 @@ SPEC CHECKSUMS:
   RNFBApp: 9b25191f7a5e72c185b7e43fffb0d906869c4659
   RNFBFirestore: be3b76650231721bad4e9b28bf3a09a3ce62f8bb
   RNGestureHandler: 7feb85c5a30ebbcd4d5c7a851ba9e7eafb9860cb
-  RNReanimated: 06342ad46707263f3009e00b88beca6188c3675d
+  RNReanimated: 7a651ffb271188cbe8fe9795783fc20a3408ac73
   RNScreens: 2b73f5eb2ac5d94fbd61fa4be0bfebd345716825
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
