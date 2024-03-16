@@ -2,17 +2,20 @@ import {defineConfig, transformWithEsbuild} from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import svgr from 'vite-plugin-svgr';
+import babel from 'vite-plugin-babel';
 
 export default defineConfig({
   define: {
     global: 'window',
     'process.env': {},
-    __DEV__: 'true',
+    __DEV__: 'false',
   },
   optimizeDeps: {
+    disabled: false,
     esbuildOptions: {
       mainFields: ['module', 'main'],
       resolveExtensions: ['.web.js', '.js', '.ts'],
+      jsx: 'automatic',
       loader: {
         '.js': 'jsx',
       },
@@ -42,9 +45,22 @@ export default defineConfig({
     },
     svgr(),
     react(),
+    babel({
+      filter:
+        /[\/](node_modules\/@react-navigation|node_modules\/react-native-drawer-layout)[\/].+\.(js|ts|jsx|tsx)$/,
+      babelConfig: {
+        babelrc: false,
+        configFile: false,
+        plugins: [
+          '@babel/plugin-proposal-export-namespace-from',
+          'react-native-reanimated/plugin',
+        ],
+      },
+    }),
   ],
   build: {
     commonjsOptions: {
+      include: [],
       transformMixedEsModules: true,
     },
   },
