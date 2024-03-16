@@ -1,5 +1,5 @@
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../NavigationTypes';
+import {RootStackParamList} from '../Navigation/NavigationTypes';
 import {ScreenWrapper, Typography} from '@ui-library/atoms';
 import {signOut} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
@@ -12,7 +12,7 @@ import {initialNote} from '../mocks/data';
 import {useEffect, useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import firestore from '../firebase/firestore';
-import {useUserProvider} from '../firebase/UserProvider';
+import {useUserProvider} from '../context/UserProvider';
 import {NoteModel} from '../firebase/firestoreTypes';
 import {ActiveNotePanel} from './Notes/ActiveNotesPanel';
 import {PanelFooterButton} from './Notes/PanelFooterButton';
@@ -28,21 +28,9 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
   const styles = themedStyles();
   const {isSmallerThan, isLargerThan, isSize} = useSizeRender();
   const [isSessionActive, setIsSessionActive] = useState(false);
-  const {userData} = useUserProvider();
 
   const {noteId: selectedNoteId, campaignId: selectedCampaignId} =
     route.params || {}; //sad that I need to do this :(
-
-  ///THIS IS JUST DEMO WHILE I DON'T HAVE A CAMPAIGN SELECTION SCREEN
-  useEffect(() => {
-    if (userData) {
-      firestore.getCampaigns(userData.id).then(data => {
-        if (data.length > 0) {
-          navigation.setParams({campaignId: data[0].id});
-        }
-      });
-    }
-  }, [userData]);
 
   const showNotesPanel =
     (isSmallerThan(DEVICE_SIZES.XL) && !isSessionActive) ||
@@ -100,7 +88,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
                 Session Notes
               </Typography>
               <View style={{margin: 20}}>
-                <EditableMarkdownView initialMarkdown={initialNote} />
+                <EditableMarkdownView />
               </View>
             </View>
             {isSmallerThan(DEVICE_SIZES.XL) && (

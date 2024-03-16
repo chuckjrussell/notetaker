@@ -55,6 +55,34 @@ class FirestoreDB implements IFirestore {
     });
   }
 
+  getCampaignsSubscription(
+    userId: string,
+    callback: SubscriptionCallback<CampaignModel[]>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      query(
+        collection(db, 'Campaigns'),
+        where('createdBy.userId', '==', userId),
+      ),
+      querySnapshot => {
+        const campaigns: CampaignModel[] = [];
+        querySnapshot.forEach(doc => {
+          campaigns.push({id: doc.id, ...doc.data()});
+        });
+        callback(campaigns);
+      },
+    );
+    return unsub;
+  }
+
+  createCampaign(campaign: Omit<CampaignModel, 'id'>) {
+    return new Promise<NoteContentsModel>(async resolve => {
+      const campaignCollection = collection(db, Schema.campaign);
+      const retVal = await addDoc(campaignCollection, campaign);
+      resolve({...campaign, id: retVal.id});
+    });
+  }
+
   getNotesSubscription(
     campaignId: string,
     callback: SubscriptionCallback<NoteModel[]>,

@@ -45,6 +45,10 @@ export interface IFirestore {
   getUser(userId: string): Promise<UserModel>;
   getUsers(): Promise<UserModel[]>;
   getCampaigns(userId: string): Promise<CampaignModel[]>;
+  getCampaignsSubscription(
+    userId: string,
+    callback: SubscriptionCallback<CampaignModel[]>,
+  ): Unsubscribe;
   getNotesSubscription(
     campaignId: string,
     callback: SubscriptionCallback<NoteModel[]>,

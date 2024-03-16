@@ -3,8 +3,8 @@ import {Dimensions, SafeAreaView} from 'react-native';
 
 import {CreateResponsiveStyle, DEVICE_SIZES} from 'rn-responsive-styles';
 import {ThemeProvider} from '@ui-library/context/ThemeProvider';
-import {Navigation} from './Navigation';
-import {UserProvider} from './firebase/UserProvider';
+import {Navigation} from './Navigation/Navigation';
+import {UserProvider} from './context/UserProvider';
 import {baseTheme} from '@ui-library/context/theme';
 
 function App(): React.JSX.Element {

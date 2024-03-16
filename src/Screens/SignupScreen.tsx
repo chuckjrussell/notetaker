@@ -1,7 +1,7 @@
 import {TextInput, ScreenContainer, InfoPanel, Label} from '@ui-library/atoms';
 import {useState} from 'react';
 import {Button, SimpleFormLayout} from '../../ui-library';
-import {RootStackParamList} from '../NavigationTypes';
+import {RootStackParamList} from '../Navigation/NavigationTypes';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/firebase.config';
