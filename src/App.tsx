@@ -5,7 +5,7 @@ import {CreateResponsiveStyle, DEVICE_SIZES} from 'rn-responsive-styles';
 import {ThemeProvider} from '@ui-library/context/ThemeProvider';
 import {Navigation} from './Navigation/Navigation';
 import {UserProvider} from './context/UserProvider';
-import {baseTheme} from '@ui-library/context/theme';
+import {CreateThemedStyle, baseTheme} from '@ui-library/context/theme';
 
 function App(): React.JSX.Element {
   const styles = useStyles();
@@ -21,12 +21,14 @@ function App(): React.JSX.Element {
   );
 }
 
-const useStyles = CreateResponsiveStyle({
-  container: {
-    backgroundColor: baseTheme.palette.gray.dark,
-    paddingHorizontal: 32,
-    flexGrow: 1,
+const useStyles = CreateThemedStyle(theme => ({
+  defaultStyle: {
+    container: {
+      backgroundColor: baseTheme.palette.gray.dark,
+      paddingHorizontal: theme.application.padding.default,
+      flexGrow: 1,
+    },
   },
-});
+}));
 
 export default App;

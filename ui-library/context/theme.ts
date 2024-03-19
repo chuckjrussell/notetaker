@@ -19,11 +19,17 @@ export const basePalette = {
 export const baseTheme = {
   application: {
     backgroundColor: basePalette.gray.dark,
-    padding: 32,
+    padding: {
+      default: 24,
+      xs: 12,
+    },
   },
   panel: {
     backgroundColor: basePalette.gray.medium,
-    marginVertical: 12,
+    marginVertical: {
+      default: 12,
+      xs: 8,
+    },
     gap: 24,
   },
   text: {

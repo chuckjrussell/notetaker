@@ -1,6 +1,7 @@
 import {StyleProp, StyleSheet, Text, TextStyle, ViewStyle} from 'react-native';
 import type {PropsWithChildren} from 'react';
 import {CreateThemedStyle} from '@ui-library/context/theme';
+import {DEVICE_SIZES} from 'rn-responsive-styles';
 
 export type TypographyVariant =
   | 'heading1'
@@ -64,6 +65,25 @@ const themedStyles = CreateThemedStyle(theme => ({
       fontSize: 16,
       fontFamily: 'Rubik-Regular',
       color: theme.palette.white,
+    },
+  },
+  overrideStyles: {
+    [DEVICE_SIZES.XS]: {
+      heading1: {
+        fontSize: 24,
+      },
+      heading2: {
+        fontSize: 20,
+      },
+      heading3: {
+        fontSize: 16,
+      },
+      heading4: {
+        fontSize: 14,
+      },
+      paragraph: {
+        fontSize: 12,
+      },
     },
   },
 }));
