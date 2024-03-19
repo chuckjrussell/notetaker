@@ -10,7 +10,10 @@ import bold from '../assets/fonts/Rubik-Bold.ttf';
 
 const cssOverrides = `
 html, body, #root {
-  height: 100vh;
+  min-height: 100vh;
+  /* mobile viewport bug fix */
+  min-height: -webkit-fill-available;
+  height: -webkit-fill-available;
 }
 
 #root {

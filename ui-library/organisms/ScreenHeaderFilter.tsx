@@ -65,12 +65,19 @@ const useThemeStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
     container: {
       flexDirection: 'row',
-      marginVertical: theme.panel.marginVertical,
+      marginBottom: theme.panel.marginVertical.default,
       width: '100%',
     },
     searchBar: {
       marginRight: 20,
       width: '32%',
+    },
+  },
+  overrideStyles: {
+    [DEVICE_SIZES.XS]: {
+      container: {
+        marginBottom: theme.panel.marginVertical.xs,
+      },
     },
   },
 }));

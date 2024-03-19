@@ -48,7 +48,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
       overlayStyle={{backgroundColor: 'transparent'}}
       renderDrawerContent={() => {
         return (
-          <>
+          <View style={styles.drawerWrapper}>
             <Button
               variant="secondary"
               text="Close"
@@ -68,7 +68,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               selectedNoteId={selectedNoteId}
               campaignId={selectedCampaignId}
             />
-          </>
+          </View>
         );
       }}>
       <ScreenWrapper>
@@ -142,7 +142,10 @@ const themedStyles = CreateThemedStyle(theme => ({
     drawerStyle: {
       backgroundColor: theme.application.backgroundColor,
       width: '100%',
-      padding: theme.application.padding,
+      padding: theme.application.padding.default,
+    },
+    drawerWrapper: {
+      flexGrow: 1,
     },
     pageWrapper: {
       flexDirection: 'row',
@@ -178,6 +181,11 @@ const themedStyles = CreateThemedStyle(theme => ({
     [DEVICE_SIZES.LG]: {
       note: {
         width: '100%',
+      },
+    },
+    [DEVICE_SIZES.XS]: {
+      drawerStyle: {
+        padding: theme.application.padding.xs,
       },
     },
   },

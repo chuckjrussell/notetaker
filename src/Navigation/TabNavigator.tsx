@@ -150,7 +150,7 @@ const themedStyles = CreateThemedStyle(theme => ({
         flexDirection: 'column',
         width: 80,
         marginLeft: 20,
-        marginVertical: 40,
+        marginVertical: theme.application.padding.default,
         borderRadius: theme.borders.radius,
         alignItems: 'center',
         paddingTop: 50,
@@ -166,7 +166,8 @@ const themedStyles = CreateThemedStyle(theme => ({
       navigationBar: {
         flexDirection: 'row',
         height: 80,
-        marginHorizontal: 20,
+        marginHorizontal: theme.application.padding.xs,
+        marginBottom: theme.application.padding.xs,
         borderRadius: theme.borders.radius,
         justifyContent: 'space-around',
         alignItems: 'center',

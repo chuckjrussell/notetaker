@@ -9,14 +9,13 @@ import {CreateThemedStyle} from '@ui-library/context/theme';
 import {Panel} from './Panel';
 import {useEffect, useState} from 'react';
 import {EditableMarkdownView} from '@ui-library/molecules';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type ActiveNotePanelProps = {
   noteId?: string;
   campaignId?: string;
   onSessionPress: () => void;
 };
-
-//TODO: Add Firebase Integration here for currently selected note details
 
 export const ActiveNotePanel = ({
   noteId,
@@ -57,7 +56,7 @@ export const ActiveNotePanel = ({
         {note && campaignId && noteId ? (
           <>
             <EditableTextField
-              style={{paddingHorizontal: 20, marginBottom: 20}}
+              style={{paddingHorizontal: 20}}
               variant="heading2"
               initialText={note.title || '(untitled)'}
               onTextChanged={newText => {
@@ -67,7 +66,14 @@ export const ActiveNotePanel = ({
                 });
               }}
             />
-            <View style={{margin: 20}}>
+            <ScrollView
+              style={{
+                margin: 20,
+                flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: 'auto',
+                height: 0,
+              }}>
               <EditableMarkdownView
                 contents={noteContents?.contents}
                 onContentsChanged={newText => {
@@ -83,10 +89,9 @@ export const ActiveNotePanel = ({
                   }
                 }}
               />
-            </View>
+            </ScrollView>
           </>
         ) : (
-          // <></>
           <Icon iconType="spellBook" style={styles.noNoteSelectedIcon} />
         )}
       </View>

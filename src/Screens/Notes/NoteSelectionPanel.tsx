@@ -1,12 +1,13 @@
 import {HorizontalRule, Typography} from '@ui-library/atoms';
 import {Panel} from './Panel';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import {PanelFooterButton} from './PanelFooterButton';
 import firestore from '../../firebase/firestore';
 import {NoteModel} from 'firebase/firestoreTypes';
 import {useEffect, useState} from 'react';
 import {DEVICE_SIZES, minSize} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
+import {ScrollView} from 'react-native-gesture-handler';
 
 type NoteSelectionPanelType = {
   campaignId: string;
@@ -34,52 +35,61 @@ export const NoteSelectionPanel = ({
 
   return (
     <Panel>
-      <Typography
-        style={{paddingHorizontal: 20, marginBottom: 20}}
-        variant="heading2">
-        Notes
-      </Typography>
-      <FlatList
-        style={styles.noteList}
-        data={allNotes}
-        renderItem={note => (
-          <TouchableOpacity
-            onPress={() => {
-              onSelectedNoteChanged(note.item);
-            }}
-            style={[
-              styles.note,
-              ...(note.item.id === selectedNoteId ? [styles.selectedNote] : []),
-            ]}
-            key={note.item.id}>
-            <Typography style={{marginLeft: 20}} variant="paragraph">
-              {note.item.title}
-            </Typography>
-            <Typography style={{marginRight: 20}} variant="paragraph">
-              {note.item.type}
-            </Typography>
-          </TouchableOpacity>
-        )}
-        ItemSeparatorComponent={HorizontalRule}
-      />
-      {/* TODO: Delete this when the note creation is finished */}
-      <PanelFooterButton
-        text="New Note"
-        onPress={() => {
-          //Add a demo note to the database.
-          if (campaignId) {
-            firestore
-              .createNote(campaignId, {
-                title: 'New Note',
-                type: 'Note',
-                snippet: '',
-              })
-              .then(newNote => {
-                onNoteCreated(newNote);
-              });
-          }
-        }}
-      />
+      <View style={{flexGrow: 1}}>
+        <Typography style={{paddingHorizontal: 20}} variant="heading2">
+          Notes
+        </Typography>
+        <ScrollView
+          style={{
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: 'auto',
+            height: 0,
+          }}>
+          <FlatList
+            style={styles.noteList}
+            data={allNotes}
+            renderItem={note => (
+              <TouchableOpacity
+                onPress={() => {
+                  onSelectedNoteChanged(note.item);
+                }}
+                style={[
+                  styles.note,
+                  ...(note.item.id === selectedNoteId
+                    ? [styles.selectedNote]
+                    : []),
+                ]}
+                key={note.item.id}>
+                <Typography style={{marginLeft: 20}} variant="paragraph">
+                  {note.item.title}
+                </Typography>
+                <Typography style={{marginRight: 20}} variant="paragraph">
+                  {note.item.type}
+                </Typography>
+              </TouchableOpacity>
+            )}
+            ItemSeparatorComponent={HorizontalRule}
+          />
+        </ScrollView>
+        {/* TODO: Delete this when the note creation is finished */}
+        <PanelFooterButton
+          text="New Note"
+          onPress={() => {
+            if (campaignId) {
+              firestore
+                .createNote(campaignId, {
+                  title: 'New Note',
+                  type: 'Note',
+                  snippet: '',
+                })
+                .then(newNote => {
+                  onNoteCreated(newNote);
+                });
+            }
+          }}
+        />
+      </View>
     </Panel>
   );
 };
