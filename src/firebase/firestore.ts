@@ -30,7 +30,7 @@ import {serverTimestamp} from 'firebase/database';
 
 // Initialize Firebase
 const db = getFirestore(app);
-connectFirestoreEmulator(db, '127.0.0.1', 8080);
+//connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 class FirestoreDB implements IFirestore {
   getUser(userId: string): Promise<UserModel> {
