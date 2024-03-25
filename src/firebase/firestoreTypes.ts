@@ -1,8 +1,12 @@
+import {FieldValue} from '@firebase/firestore';
+
 export const Schema = {
   campaign: 'Campaigns',
   notes: 'notes',
   noteContents: 'noteContents',
   users: 'Users',
+  sessions: 'sessions',
+  sessionContents: 'sessionContents',
 };
 
 export type UserModel = {
@@ -37,6 +41,18 @@ export type NoteContentsModel = {
   contents?: string;
 };
 
+export type SessionModel = {
+  id: string;
+  title?: string;
+  snippet?: string;
+  dateCreated?: string | FieldValue;
+};
+
+export type SessionContentsModel = {
+  id: string;
+  contents?: string;
+};
+
 export type SubscriptionCallback<T> = (data: T) => void;
 
 type Unsubscribe = () => void;
@@ -48,6 +64,11 @@ export interface IFirestore {
   getCampaignsSubscription(
     userId: string,
     callback: SubscriptionCallback<CampaignModel[]>,
+  ): Unsubscribe;
+  getNoteSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteModel | undefined>,
   ): Unsubscribe;
   getNotesSubscription(
     campaignId: string,
@@ -68,6 +89,33 @@ export interface IFirestore {
   getNoteContentSubscription(
     campaignId: string,
     noteId: string,
+    callback: SubscriptionCallback<NoteContentsModel | undefined>,
+  ): Unsubscribe;
+  createSession(
+    campaignId: string,
+    note: Omit<SessionModel, 'id'>,
+  ): Promise<SessionModel>;
+  createSessionContent(
+    campaignId: string,
+    sessionId: string,
+    sessionContents: Omit<NoteContentsModel, 'id'>,
+  ): Promise<SessionContentsModel>;
+  updateSessionContent(
+    campaignId: string,
+    sessionId: string,
+    sessionContents: SessionContentsModel,
+  ): Promise<any>;
+  getLatestSessionSubscription(
+    campaignId: string,
+    callback: SubscriptionCallback<SessionModel | undefined>,
+  ): Unsubscribe;
+  getSessionsSubscription(
+    campaignId: string,
+    callback: SubscriptionCallback<SessionModel[]>,
+  ): Unsubscribe;
+  getSessionContentSubscription(
+    campaignId: string,
+    sessionId: string,
     callback: SubscriptionCallback<NoteContentsModel | undefined>,
   ): Unsubscribe;
 }

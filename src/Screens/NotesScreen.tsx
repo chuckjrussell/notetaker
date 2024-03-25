@@ -7,14 +7,12 @@ import {View} from 'react-native';
 import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ScreenHeaderFilters} from '@ui-library/organisms/ScreenHeaderFilter';
-import {EditableMarkdownView} from '@ui-library/molecules';
 import {useState} from 'react';
 import {RouteProp} from '@react-navigation/native';
 import {ActiveNotePanel} from './Notes/ActiveNotesPanel';
-import {PanelFooterButton} from './Notes/PanelFooterButton';
-import {Panel} from './Notes/Panel';
 import {NoteSelectionPanel} from './Notes/NoteSelectionPanel';
 import {Drawer} from 'react-native-drawer-layout';
+import {SessionNotesPanel} from './Notes/SessionNotesPanel';
 
 interface NotesScreenProps {
   navigation: StackNavigationProp<RootStackParamList, 'Notes'>;
@@ -98,6 +96,7 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
               campaignId={selectedCampaignId}
             />
           ) : null}
+
           {/* Active Notes Panel: Should NOT render if there is no content (no selected id) 
           Also should not render if its in two panel layout and not active
         */}
@@ -110,26 +109,11 @@ export const NotesScreen = ({navigation, route}: NotesScreenProps) => {
           )}
 
           {/* Session Notes Panel */}
-
           {showSessionPanel && (
-            <Panel isContent>
-              <View style={{flexGrow: 1}}>
-                <Typography
-                  style={{paddingHorizontal: 20, marginBottom: 20}}
-                  variant="heading2">
-                  Session Notes
-                </Typography>
-                <View style={{margin: 20}}>
-                  <EditableMarkdownView />
-                </View>
-              </View>
-              {isSmallerThan(DEVICE_SIZES.XL) && (
-                <PanelFooterButton
-                  text="Switch to Note"
-                  onPress={() => setIsSessionActive(false)}
-                />
-              )}
-            </Panel>
+            <SessionNotesPanel
+              campaignId={selectedCampaignId}
+              onNotesPress={() => setIsSessionActive(false)}
+            />
           )}
         </View>
       </ScreenWrapper>

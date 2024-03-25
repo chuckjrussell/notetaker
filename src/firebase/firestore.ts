@@ -10,6 +10,9 @@ import {
   onSnapshot,
   Unsubscribe,
   getFirestore,
+  orderBy,
+  limit,
+  connectFirestoreEmulator,
 } from '@firebase/firestore';
 import {app} from './firebase.config.ts';
 import {
@@ -20,10 +23,14 @@ import {
   NoteContentsModel,
   SubscriptionCallback,
   Schema,
+  SessionModel,
+  SessionContentsModel,
 } from './firestoreTypes';
+import {serverTimestamp} from 'firebase/database';
 
 // Initialize Firebase
 const db = getFirestore(app);
+connectFirestoreEmulator(db, '127.0.0.1', 8080);
 
 class FirestoreDB implements IFirestore {
   getUser(userId: string): Promise<UserModel> {
@@ -112,20 +119,6 @@ class FirestoreDB implements IFirestore {
     return setDoc(doc(db, 'Campaigns', campaignId, 'notes', note.id), note);
   }
 
-  getNoteSubscription(
-    campaignId: string,
-    noteId: string,
-    callback: SubscriptionCallback<NoteModel | undefined>,
-  ): Unsubscribe {
-    const unsub = onSnapshot(
-      doc(db, 'Campaigns', campaignId, 'notes', noteId),
-      querySnapshot => {
-        callback({id: querySnapshot.id, ...querySnapshot.data()});
-      },
-    );
-    return unsub;
-  }
-
   /**********************************
    * NOTE CONTENTS
    **********************************/
@@ -167,6 +160,20 @@ class FirestoreDB implements IFirestore {
     );
   }
 
+  getNoteSubscription(
+    campaignId: string,
+    noteId: string,
+    callback: SubscriptionCallback<NoteModel | undefined>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      doc(db, 'Campaigns', campaignId, 'notes', noteId),
+      querySnapshot => {
+        callback({id: querySnapshot.id, ...querySnapshot.data()});
+      },
+    );
+    return unsub;
+  }
+
   getNoteContentSubscription(
     campaignId: string,
     noteId: string,
@@ -180,6 +187,138 @@ class FirestoreDB implements IFirestore {
         Schema.notes,
         noteId,
         Schema.noteContents,
+      ),
+      querySnapshot => {
+        if (!querySnapshot.empty) {
+          const noteDoc = querySnapshot.docs[0];
+          callback({id: noteDoc.id, ...noteDoc.data()});
+        } else {
+          callback(undefined);
+        }
+      },
+    );
+    return unsub;
+  }
+
+  /*************************************************
+   * Session
+   **************************************************/
+  createSession(campaignId: string, session: Omit<SessionModel, 'id'>) {
+    return new Promise<SessionModel>(async resolve => {
+      const sessionsCollection = collection(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.sessions,
+      );
+      const retVal = await addDoc(sessionsCollection, {
+        ...session,
+        dateCreated: serverTimestamp(),
+      });
+      resolve({
+        ...session,
+        id: retVal.id,
+      });
+    });
+  }
+
+  getLatestSessionSubscription(
+    campaignId: string,
+    callback: SubscriptionCallback<SessionModel | undefined>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      query(
+        collection(db, Schema.campaign, campaignId, Schema.sessions),
+        orderBy('dateCreated'),
+        limit(1),
+      ),
+      querySnapshot => {
+        if (querySnapshot.empty) {
+          callback(undefined);
+        } else {
+          callback({
+            id: querySnapshot.docs[0].id,
+            ...querySnapshot.docs[0].data(),
+          });
+        }
+        // const sessions: SessionModel[] = [];
+        // querySnapshot.forEach(doc => {
+        //   sessions.push({id: doc.id, ...doc.data()});
+        // });
+        // callback(sessions);
+      },
+    );
+    return unsub;
+  }
+
+  getSessionsSubscription(
+    campaignId: string,
+    callback: SubscriptionCallback<SessionModel[]>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      collection(db, Schema.campaign, campaignId, Schema.sessions),
+      querySnapshot => {
+        const sessions: SessionModel[] = [];
+        querySnapshot.forEach(doc => {
+          sessions.push({id: doc.id, ...doc.data()});
+        });
+        callback(sessions);
+      },
+    );
+    return unsub;
+  }
+
+  createSessionContent(
+    campaignId: string,
+    sessionId: string,
+    sessionContents: Omit<NoteContentsModel, 'id'>,
+  ) {
+    return new Promise<NoteContentsModel>(async resolve => {
+      const noteContentsCollection = collection(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.sessions,
+        sessionId,
+        Schema.sessionContents,
+      );
+      const retVal = await addDoc(noteContentsCollection, sessionContents);
+      resolve({...sessionContents, id: retVal.id});
+    });
+  }
+
+  updateSessionContent(
+    campaignId: string,
+    sessionId: string,
+    sessionContents: SessionContentsModel,
+  ) {
+    return setDoc(
+      doc(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.sessions,
+        sessionId,
+        Schema.sessionContents,
+        sessionContents.id,
+      ),
+      sessionContents,
+    );
+  }
+
+  getSessionContentSubscription(
+    campaignId: string,
+    sessionId: string,
+    callback: SubscriptionCallback<NoteContentsModel | undefined>,
+  ): Unsubscribe {
+    const unsub = onSnapshot(
+      collection(
+        db,
+        Schema.campaign,
+        campaignId,
+        Schema.sessions,
+        sessionId,
+        Schema.sessionContents,
       ),
       querySnapshot => {
         if (!querySnapshot.empty) {

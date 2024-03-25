@@ -1,4 +1,10 @@
-import {Button, Card, ScreenWrapper, Typography} from '@ui-library/atoms';
+import {
+  Button,
+  Card,
+  ScreenWrapper,
+  TextInput,
+  Typography,
+} from '@ui-library/atoms';
 import {RootStackParamList} from '../../Navigation/NavigationTypes';
 import {View} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -14,6 +20,52 @@ interface DemoScreenProps {
   navigation: StackNavigationProp<RootStackParamList, 'Campaign'>;
   route: RouteProp<RootStackParamList, 'Campaign'>;
 }
+
+const AddCampaignButton = () => {
+  const {userData} = useUserProvider();
+  const [isCreating, setIsCreating] = useState(false);
+  const [campaignTitle, setCampaignTitle] = useState<string>();
+  const styles = themedStyles();
+  return (
+    <Card style={styles.card}>
+      {isCreating ? (
+        <>
+          <TextInput
+            value={campaignTitle}
+            onChangeText={newText => setCampaignTitle(newText)}
+          />
+          <Button
+            variant="primary"
+            onPress={() => {
+              firestore.createCampaign({
+                name: campaignTitle,
+                createdBy: userData
+                  ? {
+                      ...userData,
+                      userId: userData.id,
+                    }
+                  : undefined,
+              });
+            }}
+            text="Create Campaign"></Button>
+
+          <Button
+            variant="secondary"
+            onPress={() => setIsCreating(false)}
+            text="Cancel"></Button>
+        </>
+      ) : (
+        <>
+          <Button
+            variant="primary"
+            text="New"
+            onPress={() => setIsCreating(true)}
+          />
+        </>
+      )}
+    </Card>
+  );
+};
 
 export const CampaignScreen = ({navigation, route}: DemoScreenProps) => {
   const {userData} = useUserProvider();
@@ -47,6 +99,7 @@ export const CampaignScreen = ({navigation, route}: DemoScreenProps) => {
                 text="Launch"></Button>
             </Card>
           ))}
+          <AddCampaignButton />
         </View>
       )}
     </ScreenWrapper>
