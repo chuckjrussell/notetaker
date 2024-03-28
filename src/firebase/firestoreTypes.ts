@@ -93,7 +93,7 @@ export interface IFirestore {
   ): Unsubscribe;
   createSession(
     campaignId: string,
-    note: Omit<SessionModel, 'id'>,
+    session: Omit<SessionModel, 'id'>,
   ): Promise<SessionModel>;
   createSessionContent(
     campaignId: string,

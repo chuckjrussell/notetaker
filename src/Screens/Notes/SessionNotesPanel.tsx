@@ -34,18 +34,15 @@ export const SessionNotesPanel = ({
 
   useEffect(() => {
     if (!campaignId) {
-      console.log('no current session set');
       return;
     }
     return firestore.getLatestSessionSubscription(campaignId, latestSession => {
-      console.log('Setting current session', JSON.stringify(latestSession));
       setCurrentSession(latestSession);
     });
   }, [campaignId, setCurrentSession]);
 
   useEffect(() => {
     if (!currentSession || !campaignId) {
-      console.log('no current session set');
       return;
     }
     return firestore.getSessionContentSubscription(

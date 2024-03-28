@@ -20,7 +20,8 @@ export const ScreenWrapper = ({children}: {children: React.ReactNode}) => {
 const themedStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
     container: {
-      padding: 32,
+      padding: 12,
+      paddingBottom: 8,
       backgroundColor: theme.palette.gray.dark,
       flexGrow: 1,
     },

@@ -28,7 +28,6 @@ export const NoteSelectionPanel = ({
   useEffect(() => {
     const unsub = firestore.getNotesSubscription(campaignId, notes => {
       setAllNotes(notes);
-      console.log('Update to notes ', JSON.stringify(notes, null, 2));
     });
     return unsub;
   }, [campaignId]);
@@ -39,7 +38,7 @@ export const NoteSelectionPanel = ({
         <Typography style={{paddingHorizontal: 20}} variant="heading2">
           Notes
         </Typography>
-        <ScrollView
+        <View
           style={{
             flexGrow: 1,
             flexShrink: 1,
@@ -71,7 +70,7 @@ export const NoteSelectionPanel = ({
             )}
             ItemSeparatorComponent={HorizontalRule}
           />
-        </ScrollView>
+        </View>
         {/* TODO: Delete this when the note creation is finished */}
         <PanelFooterButton
           text="New Note"

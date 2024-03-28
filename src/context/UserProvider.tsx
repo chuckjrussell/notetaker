@@ -29,7 +29,6 @@ export const UserProvider = ({children}: UserProviderProps) => {
       if (user) {
         setUser(user);
         firestore.getUser(user?.uid).then(data => {
-          console.log('got user: ', JSON.stringify(data));
           setUserData(data);
         });
       }

@@ -35,14 +35,12 @@ export const ActiveNotePanel = ({
 
   useEffect(() => {
     if (!campaignId || !noteId) {
-      console.log('no campaign id or note id set');
       return;
     }
     return firestore.getNoteContentSubscription(
       campaignId,
       noteId,
       noteContents => {
-        console.log('Setting note contents from firestore', noteContents);
         setNoteContents(noteContents);
       },
     );

@@ -13,6 +13,7 @@ import {
   orderBy,
   limit,
   connectFirestoreEmulator,
+  serverTimestamp,
 } from '@firebase/firestore';
 import {app} from './firebase.config.ts';
 import {
@@ -26,11 +27,13 @@ import {
   SessionModel,
   SessionContentsModel,
 } from './firestoreTypes';
-import {serverTimestamp} from 'firebase/database';
 
 // Initialize Firebase
 const db = getFirestore(app);
-//connectFirestoreEmulator(db, '127.0.0.1', 8080);
+
+if (process.env.NODE_ENV === 'DEV') {
+  connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}
 
 class FirestoreDB implements IFirestore {
   getUser(userId: string): Promise<UserModel> {
@@ -213,6 +216,10 @@ class FirestoreDB implements IFirestore {
       );
       const retVal = await addDoc(sessionsCollection, {
         ...session,
+      });
+      setDoc(doc(db, Schema.campaign, campaignId, Schema.sessions, retVal.id), {
+        ...session,
+        id: retVal.id,
         dateCreated: serverTimestamp(),
       });
       resolve({
@@ -241,11 +248,6 @@ class FirestoreDB implements IFirestore {
             ...querySnapshot.docs[0].data(),
           });
         }
-        // const sessions: SessionModel[] = [];
-        // querySnapshot.forEach(doc => {
-        //   sessions.push({id: doc.id, ...doc.data()});
-        // });
-        // callback(sessions);
       },
     );
     return unsub;

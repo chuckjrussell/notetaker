@@ -24,6 +24,7 @@ export const EditableMarkdownView = ({
         multiline
         autofill
         onChangeText={newText => setEditingContent(newText)}
+        onSelectionChange={({nativeEvent}) => {}}
         value={editingContent}
         onBlur={() => {
           setIsEditing(false);
