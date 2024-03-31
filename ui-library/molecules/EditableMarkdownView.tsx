@@ -1,17 +1,29 @@
+import {useNavigation} from '@react-navigation/native';
 import {TextInput, Typography} from '@ui-library';
-import {useEffect, useRef, useState} from 'react';
-import {StyleSheet, Touchable, TouchableOpacity} from 'react-native';
+import {CreateThemedStyle} from '@ui-library/context/theme';
+import {useState} from 'react';
+import {TouchableOpacity, Text} from 'react-native';
 import Markdown from 'react-native-markdown-display';
+
+type LinkMap = {
+  name: string;
+  id: string;
+};
 
 export const EditableMarkdownView = ({
   contents,
   onContentsChanged,
+  linkMap,
 }: {
   contents?: string;
   onContentsChanged?: (newContents: string) => void;
+  linkMap?: LinkMap[];
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingContent, setEditingContent] = useState(contents);
+  const {setParams} = useNavigation();
+
+  const styles = themedStyles();
 
   const enableEditing = () => {
     setIsEditing(true);
@@ -24,7 +36,6 @@ export const EditableMarkdownView = ({
         multiline
         autofill
         onChangeText={newText => setEditingContent(newText)}
-        onSelectionChange={({nativeEvent}) => {}}
         value={editingContent}
         onBlur={() => {
           setIsEditing(false);
@@ -35,6 +46,15 @@ export const EditableMarkdownView = ({
       />
     );
   }
+
+  const mapLinks = (markdownContent?: string) => {
+    if (!markdownContent || !linkMap) return markdownContent;
+    return markdownContent.replace(/\@\[(.*?)\]/g, function (matched) {
+      const docName = matched.substring(2, matched.length - 1);
+      const note = linkMap.find(n => n.name === docName);
+      return note ? `[${docName}](${note.id})` : `${docName} (create)`;
+    });
+  };
 
   return isNullOrWhitespace(contents) ? (
     <TouchableOpacity onPress={() => setIsEditing(true)}>
@@ -54,6 +74,8 @@ export const EditableMarkdownView = ({
           paragraph: {
             color: '#ffffff',
           },
+          strong: styles.bold,
+          blockquote: styles.quotes,
         }}
         rules={{
           heading1: (node, children) => (
@@ -71,9 +93,21 @@ export const EditableMarkdownView = ({
               {children}
             </Typography>
           ),
+          link: (node, children, styles) => (
+            <Text
+              key={node.key}
+              style={styles.link}
+              onPress={() => {
+                setParams({
+                  noteId: node.attributes.href,
+                });
+              }}>
+              {children}
+            </Text>
+          ),
         }}
         mergeStyle={true}>
-        {contents}
+        {mapLinks(contents)}
       </Markdown>
     </TouchableOpacity>
   );
@@ -82,3 +116,15 @@ export const EditableMarkdownView = ({
 function isNullOrWhitespace(input?: string) {
   return !input || !input.trim();
 }
+
+const themedStyles = CreateThemedStyle(theme => ({
+  defaultStyle: {
+    bold: {
+      fontWeight: 'bold',
+      fontFamily: 'Rubik-Bold',
+    },
+    quotes: {
+      backgroundColor: theme.palette.gray.dark,
+    },
+  },
+}));

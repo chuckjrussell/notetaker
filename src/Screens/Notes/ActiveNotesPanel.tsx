@@ -24,6 +24,7 @@ export const ActiveNotePanel = ({
 }: ActiveNotePanelProps) => {
   const [note, setNote] = useState<NoteModel>();
   const [noteContents, setNoteContents] = useState<NoteContentsModel>();
+  const [notes, setNotes] = useState<NoteModel[]>();
   useEffect(() => {
     if (!campaignId || !noteId) {
       return;
@@ -32,6 +33,15 @@ export const ActiveNotePanel = ({
       setNote(updatedNote);
     });
   }, [campaignId, noteId, setNote]);
+
+  useEffect(() => {
+    if (!campaignId || !noteId) {
+      return;
+    }
+    return firestore.getNotesSubscription(campaignId, updatedNotes => {
+      setNotes(updatedNotes);
+    });
+  }, [campaignId, noteId, setNotes]);
 
   useEffect(() => {
     if (!campaignId || !noteId) {
@@ -86,6 +96,14 @@ export const ActiveNotePanel = ({
                     });
                   }
                 }}
+                linkMap={
+                  notes
+                    ? notes.map(n => ({
+                        name: n.title || '',
+                        id: n.id,
+                      }))
+                    : []
+                }
               />
             </ScrollView>
           </>
