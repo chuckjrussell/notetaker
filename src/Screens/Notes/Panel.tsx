@@ -1,11 +1,7 @@
-import {Icon} from '@ui-library/atoms/Icon';
-import {EditableTextField} from '@ui-library/molecules/EditableTextField';
-import firestore from 'firebase/firestore';
-import {NoteModel} from 'firebase/firestoreTypes';
-import {View} from 'react-native';
-import {DEVICE_SIZES, minSize, useSizeRender} from 'rn-responsive-styles';
-import {PanelFooterButton} from './PanelFooterButton';
+import {View, Image, Platform} from 'react-native';
+import {DEVICE_SIZES, minSize} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
+import {ImageBorder} from '@ui-library/molecules';
 
 type PanelProps = {
   isContent?: boolean;
@@ -15,9 +11,11 @@ type PanelProps = {
 export const Panel = ({isContent, children}: PanelProps) => {
   const styles = themedStyles();
   return (
-    <View style={[styles.panel, isContent ? styles.contentPanel : {}]}>
-      {children}
-    </View>
+    <ImageBorder>
+      <View style={[styles.panel, isContent ? styles.contentPanel : {}]}>
+        {children}
+      </View>
+    </ImageBorder>
   );
 };
 
