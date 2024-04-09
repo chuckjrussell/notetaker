@@ -64,7 +64,6 @@ export const ActiveNotePanel = ({
         {note && campaignId && noteId ? (
           <>
             <EditableTextField
-              style={{paddingHorizontal: 20}}
               variant="heading2"
               initialText={note.title || '(untitled)'}
               onTextChanged={newText => {
@@ -76,7 +75,6 @@ export const ActiveNotePanel = ({
             />
             <ScrollView
               style={{
-                margin: 20,
                 flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 'auto',
@@ -120,46 +118,11 @@ export const ActiveNotePanel = ({
 
 const themedStyles = CreateThemedStyle(theme => ({
   defaultStyle: {
-    pageWrapper: {
-      flexDirection: 'row',
-      gap: theme.panel.gap,
-      flexGrow: 1,
-    },
-    noteList: {
-      flexWrap: 'wrap',
-      gap: 16,
-    },
-    note: {
-      paddingVertical: 20,
-      justifyContent: 'space-between',
-      flexDirection: 'row',
-      width: '100%',
-    },
-    selectedNote: {
-      backgroundColor: theme.palette.primary.medium,
-    },
-    horizontalRule: {
-      height: 1,
-      width: '100%',
-      backgroundColor: theme.palette.gray.light,
-    },
     noNoteSelectedIcon: {
       width: '60%',
       margin: 'auto',
       color: theme.palette.gray.light,
       alignSelf: 'center',
-    },
-  },
-  overrideStyles: {
-    [minSize(DEVICE_SIZES.LG)]: {
-      note: {
-        width: '100%',
-      },
-    },
-    [DEVICE_SIZES.LG]: {
-      note: {
-        width: '100%',
-      },
     },
   },
 }));

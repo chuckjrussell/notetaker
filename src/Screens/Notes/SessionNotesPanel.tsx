@@ -74,7 +74,6 @@ export const SessionNotesPanel = ({
           <>
             <View
               style={{
-                paddingHorizontal: 20,
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
@@ -90,7 +89,6 @@ export const SessionNotesPanel = ({
             </View>
             <ScrollView
               style={{
-                margin: 20,
                 flexGrow: 1,
                 flexShrink: 1,
                 flexBasis: 'auto',

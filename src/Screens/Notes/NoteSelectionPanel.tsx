@@ -43,7 +43,6 @@ export const NoteSelectionPanel = ({
             flexGrow: 1,
             flexShrink: 1,
             flexBasis: 'auto',
-            height: 0,
           }}>
           <FlatList
             style={styles.noteList}
@@ -68,7 +67,6 @@ export const NoteSelectionPanel = ({
                 </Typography>
               </TouchableOpacity>
             )}
-            ItemSeparatorComponent={HorizontalRule}
           />
         </View>
         {/* TODO: Delete this when the note creation is finished */}
@@ -106,7 +104,8 @@ const themedStyles = CreateThemedStyle(theme => ({
       width: '100%',
     },
     selectedNote: {
-      backgroundColor: theme.palette.primary.medium,
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      borderRadius: 4,
     },
   },
   overrideStyles: {

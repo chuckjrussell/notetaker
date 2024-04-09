@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import {Image, Platform} from 'react-native';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';

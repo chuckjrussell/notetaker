@@ -7,7 +7,7 @@
     "web": "vite --host",
     "web:local": "NODE_ENV=DEV vite --host",
     "web:build": "vite build",
-    "ios": "react-native run-ios --simulator='iPhone 14'",
+    "ios": "react-native run-ios --simulator='iPhone 15'",
     "lint": "eslint .",
     "pods": "cd ios && pod install && cd ..",
     "start": "react-native start",

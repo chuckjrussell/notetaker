@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {TextInput, Typography} from '@ui-library';
+import {useThemeProvider} from '@ui-library/context/ThemeProvider';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {useState} from 'react';
 import {TouchableOpacity, Text} from 'react-native';
@@ -22,6 +23,7 @@ export const EditableMarkdownView = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editingContent, setEditingContent] = useState(contents);
   const {setParams} = useNavigation();
+  const {theme} = useThemeProvider();
 
   const styles = themedStyles();
 
@@ -68,11 +70,8 @@ export const EditableMarkdownView = ({
       <Markdown
         style={{
           body: {
-            color: '#ffffff',
+            color: theme.text.color,
             fontFamily: 'Rubik-Regular',
-          },
-          paragraph: {
-            color: '#ffffff',
           },
           strong: styles.bold,
           blockquote: styles.quotes,
@@ -124,7 +123,10 @@ const themedStyles = CreateThemedStyle(theme => ({
       fontFamily: 'Rubik-Bold',
     },
     quotes: {
-      backgroundColor: theme.palette.gray.dark,
+      backgroundColor: 'rgba(0,0,0,0.3)',
+      padding: 10,
+      borderWidth: 0,
+      borderLeftWidth: 0,
     },
   },
 }));

@@ -2,7 +2,6 @@ import {TextInput, Typography} from '@ui-library';
 import {TypographyProps} from '@ui-library/atoms/Typography';
 import {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import Markdown from 'react-native-markdown-display';
 
 type EditableTextFieldProps = {
   initialText: string;
