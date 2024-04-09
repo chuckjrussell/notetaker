@@ -3,15 +3,15 @@ import {DEVICE_SIZES, minSize} from 'rn-responsive-styles';
 import {CreateThemedStyle} from '@ui-library/context/theme';
 import {ImageBorder} from '@ui-library/molecules';
 
-import border1 from '../../../assets/images/border2/border1.png';
-import border2 from '../../../assets/images/border2/border2.png';
-import border3 from '../../../assets/images/border2/border3.png';
-import border4 from '../../../assets/images/border2/border4.png';
-import border5 from '../../../assets/images/border2/border5.png';
-import border6 from '../../../assets/images/border2/border6.png';
-import border7 from '../../../assets/images/border2/border7.png';
-import border8 from '../../../assets/images/border2/border8.png';
-import border9 from '../../../assets/images/border2/border9.png';
+import border1 from '../../../assets/images/paper_border/border1.png';
+import border2 from '../../../assets/images/paper_border/border2.png';
+import border3 from '../../../assets/images/paper_border/border3.png';
+import border4 from '../../../assets/images/paper_border/border4.png';
+import border5 from '../../../assets/images/paper_border/border5.png';
+import border6 from '../../../assets/images/paper_border/border6.png';
+import border7 from '../../../assets/images/paper_border/border7.png';
+import border8 from '../../../assets/images/paper_border/border8.png';
+import border9 from '../../../assets/images/paper_border/border9.png';
 
 type PanelProps = {
   isContent?: boolean;
