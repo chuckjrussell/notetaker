@@ -20,8 +20,8 @@ export const baseTheme = {
   application: {
     backgroundColor: basePalette.gray.dark,
     padding: {
-      default: 24,
-      xs: 12,
+      default: 12,
+      xs: 6,
     },
   },
   panel: {
@@ -30,10 +30,10 @@ export const baseTheme = {
       default: 12,
       xs: 8,
     },
-    gap: 24,
+    gap: 12,
   },
   text: {
-    color: basePalette.white,
+    color: basePalette.gray.dark,
   },
   borders: {
     radius: 24,
